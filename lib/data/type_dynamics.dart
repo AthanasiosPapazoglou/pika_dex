@@ -50,6 +50,10 @@ final array = List.generate(rows,
     (i) => List.generate(cols + 1, (j) => i + j * cols + 1, growable: false),
     growable: false);
 
+/// List of pokemon Types
+List<String> pokemonTypes = ['Normal','Fire','Water','Grass','Electric','Ice','Fighting','Poison','Ground','Flying','Psychic','Bug','Rock','Ghost','Dragon','Dark','Steel','Fairy',];
+
+
 /// Status Graph for all pokemon types
 List<List<double>> pokemonTypeChart = [
   [1,1,1,1,1,1,1,1,1,1,1,1,(1/2),0,1,1,(1/2),1],                      // 0 Normal
@@ -62,7 +66,7 @@ List<List<double>> pokemonTypeChart = [
   [1,1,1,2,1,1,1,(1/2),(1/2),1,1,1,(1/2),(1/2),1,1,0,2],              // 7 Poison
   [1,2,1,(1/2),2,1,1,2,1,0,1,(1/2),2,1,1,1,2,1],                      // 8 Ground
   [1,1,1,2,(1/2),1,2,1,1,1,1,2,(1/2),1,1,1,(1/2),1],                  // 9 Flying
-  [1,1,1,1,1,1,2,2,1,1,(1/2),1,1,1,1,0,(1/2),1],                      // 10 Physic
+  [1,1,1,1,1,1,2,2,1,1,(1/2),1,1,1,1,0,(1/2),1],                      // 10 Psychic
   [1,(1/2),1,2,1,1,(1/2),(1/2),1,(1/2),2,1,1,(1/2),1,2,(1/2),(1/2)],  // 11 Bug
   [1,2,1,1,1,2,(1/2),1,(1/2),2,1,2,1,1,1,1,(1/2),1],                  // 12 Rock
   [0,1,1,1,1,1,1,1,1,1,2,1,1,2,1,(1/2),1,1],                          // 13 Ghost
@@ -72,7 +76,8 @@ List<List<double>> pokemonTypeChart = [
   [1,(1/2),1,1,1,1,2,(1/2),1,1,1,1,1,1,2,2,(1/2),1],                  // 17 Fairy
 ];
 
-damageMultiplierCalculator (int attackTypeIndex, List<int> defenderTypesIndexes) {
+
+double damageMultiplierCalculator (int attackTypeIndex, List<int> defenderTypesIndexes) {
   double damageMultiplier = 1;
 
   for (int i = 0; i < defenderTypesIndexes.length; i++){
@@ -82,5 +87,10 @@ damageMultiplierCalculator (int attackTypeIndex, List<int> defenderTypesIndexes)
   return damageMultiplier;
 
 }
+
+int parsePokemonTypeTextToIndex(String pokemonTypeName){
+  return pokemonTypes.indexWhere((element) => element == pokemonTypeName);
+}
+
 
 

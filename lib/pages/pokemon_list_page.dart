@@ -12,36 +12,33 @@ class MainPokemonList extends StatefulWidget {
   State<MainPokemonList> createState() => _MainPokemonListState();
 }
 
-class _MainPokemonListState extends State<MainPokemonList> {
+populateModelisedList(dynamic jsonList, List<Pokemon> modelisedList) {
+  for (int i = 0; i < 809; i++) {
+    modelisedList.add(Pokemon.fromJson(jsonList[i]));
+  }
+}
 
-   late var stringifiedJsonData;
-   late var items;
+class _MainPokemonListState extends State<MainPokemonList> {
+  late var decodedPokemonList;
+  late List<Pokemon> modelisedPokemonList;
 
   Future<String> getJsonFromFile() async {
-    final String response =
-        await rootBundle.loadString('assets/pokedex.json');
-        final itemz = jsonDecode(response);
-        setState(() {
-          items = itemz;
-        });
+    final String response = await rootBundle.loadString('assets/pokedex.json');
+    final items = jsonDecode(response);
+    setState(() {
+      decodedPokemonList = items;
+    });
     return response;
   }
 
   @override
   void initState() {
     super.initState();
-    getJsonFromFile().then((value) {
-      setState(() {
-        stringifiedJsonData = value;
-      });
-    });
+    getJsonFromFile();
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    print(items[512]['type']);
-
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -53,9 +50,12 @@ class _MainPokemonListState extends State<MainPokemonList> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 809,
+                itemCount: 808,
                 itemBuilder: (context, index) {
-                  return PokemonListCard(parentalBuilderIndex: index);
+                  return PokemonListCard(
+                    parentalBuilderIndex: index,
+                    pokemonJsonData: decodedPokemonList[index],
+                  );
                 },
               ),
             ),
