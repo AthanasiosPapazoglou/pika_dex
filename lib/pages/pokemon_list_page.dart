@@ -15,10 +15,15 @@ class MainPokemonList extends StatefulWidget {
 class _MainPokemonListState extends State<MainPokemonList> {
 
    late var stringifiedJsonData;
+   late var items;
 
   Future<String> getJsonFromFile() async {
     final String response =
         await rootBundle.loadString('assets/pokedex.json');
+        final itemz = jsonDecode(response);
+        setState(() {
+          items = itemz;
+        });
     return response;
   }
 
@@ -34,8 +39,8 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(stringifiedJsonData);
+    
+    print(items[512]['type']);
 
     return SafeArea(
       child: Scaffold(
