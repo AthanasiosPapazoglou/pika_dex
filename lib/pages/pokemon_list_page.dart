@@ -18,7 +18,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   Future<String> getJsonFromFile() async {
     final String response =
-        await rootBundle.loadString('assets/json_files/pokedex.json');
+        await rootBundle.loadString('assets/pokedex.json');
     return response;
   }
 

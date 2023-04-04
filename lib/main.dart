@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/pages/pokemon_list_page.dart';
 import 'package:pika_dex/themes/app_themes.dart';
-//KEK
 
 void main() {
   runApp(const PikaDex());
