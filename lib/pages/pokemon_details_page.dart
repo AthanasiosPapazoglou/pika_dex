@@ -40,7 +40,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   void populatePokemonDamageLists() {
     for (int i = 0; i < 18; i++) {
-      double value = damageMultiplierCalculator(i, pokemonTypesIndexes);
+      double value = damageMultiplierCalculator(i, pokemonTypesIndexes, checkIfPokemonIsLevitating(widget.pokemonId));
 
       if (value == 4.0) {
         quadrupleDamage.add(pokemonTypes[i]);

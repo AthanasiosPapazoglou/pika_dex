@@ -77,11 +77,16 @@ List<List<double>> pokemonTypeChart = [
 ];
 
 
-double damageMultiplierCalculator (int attackTypeIndex, List<int> defenderTypesIndexes) {
+double damageMultiplierCalculator (int attackTypeIndex, List<int> defenderTypesIndexes, bool isLevitating) {
   double damageMultiplier = 1;
 
   for (int i = 0; i < defenderTypesIndexes.length; i++){
      damageMultiplier = damageMultiplier * pokemonTypeChart[attackTypeIndex][defenderTypesIndexes[i]];
+     if (isLevitating){
+      if(attackTypeIndex == 8){
+        damageMultiplier = 0;
+      }
+     }
   }
 
   return damageMultiplier;
@@ -90,6 +95,10 @@ double damageMultiplierCalculator (int attackTypeIndex, List<int> defenderTypesI
 
 int parsePokemonTypeTextToIndex(String pokemonTypeName){
   return pokemonTypes.indexWhere((element) => element == pokemonTypeName);
+}
+
+bool checkIfPokemonIsLevitating(int pokemonId) {
+   return levitatingPokemons.contains(pokemonId);
 }
 
 

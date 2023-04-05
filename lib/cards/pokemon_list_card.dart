@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:pika_dex/pages/pokemon_details_page.dart';
 
 class PokemonListCard extends StatelessWidget {
-  const PokemonListCard({super.key, required this.parentalBuilderIndex, required this.pokemonJsonData});
+  const PokemonListCard(
+      {super.key,
+      required this.parentalBuilderIndex,
+      required this.pokemonJsonData});
 
   final int parentalBuilderIndex;
   final dynamic pokemonJsonData;
@@ -23,11 +26,10 @@ class PokemonListCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => PokemonDetailsPage(
-                imagePath:
-                    'assets/images/${imageNumberCorrector(pokemonId)}$pokemonId.png',
-                pokemonId: pokemonId,
-                pokemonJsonData: pokemonJsonData
-              ),
+                  imagePath:
+                      'assets/images/${imageNumberCorrector(pokemonId)}$pokemonId.png',
+                  pokemonId: pokemonId,
+                  pokemonJsonData: pokemonJsonData),
             ),
           );
         },
@@ -46,8 +48,20 @@ class PokemonListCard extends StatelessWidget {
                   width: 64,
                 ),
               ),
-              Text(pokemonJsonData['name']['english']),
-              Text('$pokemonId'),
+              Text(
+                pokemonJsonData['name']['english'],
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '$pokemonId',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           decoration: BoxDecoration(
