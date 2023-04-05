@@ -22,11 +22,12 @@ class PokemonDetailsPage extends StatefulWidget {
 class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   TextStyle graphStyle = TextStyle(fontSize: 20);
 
-  List<int> quadrupleDamage = [];
-  List<int> doubleDamage = [];
-  List<int> normalDamage = [];
-  List<int> halfDamage = [];
-  List<int> quarterDamage = [];
+  List<String> quadrupleDamage = [];
+  List<String> doubleDamage = [];
+  List<String> normalDamage = [];
+  List<String> halfDamage = [];
+  List<String> quarterDamage = [];
+  List<String> immune = [];
 
   List<int> pokemonTypesIndexes = [];
 
@@ -42,15 +43,17 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
       double value = damageMultiplierCalculator(i, pokemonTypesIndexes);
 
       if (value == 4.0) {
-        quadrupleDamage.add(i);
+        quadrupleDamage.add(pokemonTypes[i]);
       } else if (value == 2.0) {
-        doubleDamage.add(i);
+        doubleDamage.add(pokemonTypes[i]);
       } else if (value == 1.0) {
-        normalDamage.add(i);
+        normalDamage.add(pokemonTypes[i]);
       } else if (value == (1 / 2)) {
-        halfDamage.add(i);
+        halfDamage.add(pokemonTypes[i]);
+      } else if (value == (1 / 4)) {
+        quarterDamage.add(pokemonTypes[i]);
       } else {
-        quarterDamage.add(i);
+        immune.add(pokemonTypes[i]);
       }
     }
   }
@@ -93,13 +96,18 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      greyAreaTypesPlacement('x4', Colors.blue, context),
-                      greyAreaTypesPlacement('x2', Colors.green, context),
-                      greyAreaTypesPlacement('x1', Colors.yellow, context),
-                      greyAreaTypesPlacement('x1/2', Colors.orange, context),
-                      greyAreaTypesPlacement('x1/4', Colors.red, context),
                       greyAreaTypesPlacement(
-                          'x0', Colors.grey.shade600, context),
+                          'x4', Colors.blue, quadrupleDamage, context),
+                      greyAreaTypesPlacement(
+                          'x2', Colors.green, doubleDamage, context),
+                      greyAreaTypesPlacement(
+                          'x1', Colors.yellow, normalDamage, context),
+                      greyAreaTypesPlacement(
+                          'x1/2', Colors.orange, halfDamage, context),
+                      greyAreaTypesPlacement(
+                          'x1/4', Colors.red, quarterDamage, context),
+                      greyAreaTypesPlacement(
+                          'x0', Colors.grey.shade600, immune, context),
                     ],
                   ),
                 ),
@@ -111,10 +119,56 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     );
   }
 
-  Flexible greyAreaTypesPlacement(
-      String multiplier, Color colorData, BuildContext context) {
+  Widget greyAreaTypesPlacement(String multiplier, Color colorData,
+      List<String> badgeTitlesRow, BuildContext context) {
+    // return Flexible(
+    //   child: Container(
+    //     height: double.maxFinite,
+    //     width: double.maxFinite,
+    //     color: colorData,
+    //     child: Row(
+    //       children: [
+    //         Container(
+    //           width: 64,
+    //           child: Center(
+    //             child: Text(
+    //               multiplier,
+    //               style: TextStyle(color: Colors.black),
+    //             ),
+    //           ),
+    //         ),
+    //         Flexible(
+    //           child: Stack(
+    //             children: [
+    //               Container(
+    //                 height: 64,
+    //                 width: MediaQuery.of(context).size.width - 80,
+    //                 decoration: BoxDecoration(
+    //                   borderRadius: BorderRadius.circular(6),
+    //                   color: Colors.grey.shade400,
+    //                 ),
+    //               ),
+    //               Wrap(
+    //                 children: List.generate(
+    //                   badgeTitlesRow.length,
+    //                   (index) => Padding(
+    //                     padding:
+    //                         EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+    //                     child: Image.asset(
+    //                       'assets/type_badges/${badgeTitlesRow[index]}.png',
+    //                       scale: 1.7,
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
     return Flexible(
-      flex: 1,
       child: Container(
         width: double.maxFinite,
         color: colorData,
@@ -125,18 +179,40 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
               child: Center(
                 child: Text(
                   multiplier,
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Container(
-                height: 56,
-                width: MediaQuery.of(context).size.width - 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.grey.shade400,
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 64,
+                      width: MediaQuery.of(context).size.width - 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
+                    Wrap(
+                      children: List.generate(
+                        badgeTitlesRow.length,
+                        (index) => Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          child: Image.asset(
+                            'assets/type_badges/${badgeTitlesRow[index]}.png',
+                            scale: 1.7,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )
