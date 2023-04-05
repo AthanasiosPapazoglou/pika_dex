@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
+import 'package:pika_dex/themes/app_colors.dart';
+import 'package:pika_dex/themes/app_themes.dart';
 import 'package:pika_dex/utils/dismiss_swipe.dart';
 
 class PokemonDetailsPage extends StatefulWidget {
@@ -29,18 +31,21 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   List<String> quarterDamage = [];
   List<String> immune = [];
 
-  List<int> pokemonTypesIndexes = [];
+  List<String> pokemonTypeTexts = [];
+  List<int> pokemonTypeIndexes = [];
 
-  void getPokemonTypeIndexes() {
+  void getPokemonTypes() {
     for (int i = 0; i < widget.pokemonJsonData['type'].length; i++) {
-      pokemonTypesIndexes
+      pokemonTypeIndexes
           .add(parsePokemonTypeTextToIndex(widget.pokemonJsonData['type'][i]));
+      pokemonTypeTexts.add(widget.pokemonJsonData['type'][i]);
     }
   }
 
   void populatePokemonDamageLists() {
     for (int i = 0; i < 18; i++) {
-      double value = damageMultiplierCalculator(i, pokemonTypesIndexes, checkIfPokemonIsLevitating(widget.pokemonId));
+      double value = damageMultiplierCalculator(
+          i, pokemonTypeIndexes, checkIfPokemonIsLevitating(widget.pokemonId));
 
       if (value == 4.0) {
         quadrupleDamage.add(pokemonTypes[i]);
@@ -61,7 +66,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   @override
   void initState() {
     super.initState();
-    getPokemonTypeIndexes();
+    getPokemonTypes();
     populatePokemonDamageLists();
   }
 
@@ -75,10 +80,41 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
               Container(
                 width: double.maxFinite,
                 height: 64,
-                color: Colors.green,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child:  Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 35,
+                          color: AppThemes.darkTheme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      widget.pokemonJsonData['name']['english'],
+                      style:  TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: AppThemes.darkTheme.primaryColor,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 48,
+                    )
+                  ],
+                ),
               ),
               Container(
-                color: Colors.green,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: pokemonTypeColors[parsePokemonTypeTextToIndex(
+                        widget.pokemonJsonData['type'][0])]),
                 child: Hero(
                   tag: widget.pokemonId,
                   child: Image.asset(
@@ -88,14 +124,22 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   ),
                 ),
               ),
+              pokemonTypeBadgetsRow(context),
               Expanded(
                 child: Container(
                   width: double.maxFinite,
                   height: double.maxFinite,
-                  color: Colors.blueGrey.shade200,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                       Text(
+                        'Damage Taken:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppThemes.darkTheme.primaryColor,
+                        ),
+                      ),
                       greyAreaTypesPlacement(
                           'x4', Colors.blue, quadrupleDamage, context),
                       greyAreaTypesPlacement(
@@ -103,9 +147,9 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                       greyAreaTypesPlacement(
                           'x1', Colors.yellow, normalDamage, context),
                       greyAreaTypesPlacement(
-                          'x1/2', Colors.orange, halfDamage, context),
+                          'x0.5', Colors.orange, halfDamage, context),
                       greyAreaTypesPlacement(
-                          'x1/4', Colors.red, quarterDamage, context),
+                          'x0.25', Colors.red, quarterDamage, context),
                       greyAreaTypesPlacement(
                           'x0', Colors.grey.shade600, immune, context),
                     ],
@@ -121,53 +165,6 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   Widget greyAreaTypesPlacement(String multiplier, Color colorData,
       List<String> badgeTitlesRow, BuildContext context) {
-    // return Flexible(
-    //   child: Container(
-    //     height: double.maxFinite,
-    //     width: double.maxFinite,
-    //     color: colorData,
-    //     child: Row(
-    //       children: [
-    //         Container(
-    //           width: 64,
-    //           child: Center(
-    //             child: Text(
-    //               multiplier,
-    //               style: TextStyle(color: Colors.black),
-    //             ),
-    //           ),
-    //         ),
-    //         Flexible(
-    //           child: Stack(
-    //             children: [
-    //               Container(
-    //                 height: 64,
-    //                 width: MediaQuery.of(context).size.width - 80,
-    //                 decoration: BoxDecoration(
-    //                   borderRadius: BorderRadius.circular(6),
-    //                   color: Colors.grey.shade400,
-    //                 ),
-    //               ),
-    //               Wrap(
-    //                 children: List.generate(
-    //                   badgeTitlesRow.length,
-    //                   (index) => Padding(
-    //                     padding:
-    //                         EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-    //                     child: Image.asset(
-    //                       'assets/type_badges/${badgeTitlesRow[index]}.png',
-    //                       scale: 1.7,
-    //                     ),
-    //                   ),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
     return Flexible(
       child: Container(
         width: double.maxFinite,
@@ -179,7 +176,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
               child: Center(
                 child: Text(
                   multiplier,
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
@@ -192,11 +189,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                 child: Stack(
                   children: [
                     Container(
-                      height: 64,
+                      height: (badgeTitlesRow.length > 15) ? 72 : 54,
                       width: MediaQuery.of(context).size.width - 80,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6),
-                        color: Colors.grey.shade400,
+                        color: AppThemes.darkTheme.hintColor,
                       ),
                     ),
                     Wrap(
@@ -207,7 +204,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                               EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                           child: Image.asset(
                             'assets/type_badges/${badgeTitlesRow[index]}.png',
-                            scale: 1.7,
+                            scale: 2.2,
                           ),
                         ),
                       ),
@@ -216,6 +213,34 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget pokemonTypeBadgetsRow(BuildContext context) {
+    return Container(
+      width: double.maxFinite,
+      height: 64,
+      child: Center(
+        child: Column(
+          children: [
+             Text(
+              'Types:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppThemes.darkTheme.primaryColor,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                  pokemonTypeTexts.length,
+                  (index) => Image.asset(
+                      'assets/type_badges/${pokemonTypeTexts[index]}.png')),
+            ),
           ],
         ),
       ),

@@ -1,10 +1,33 @@
 
+import 'package:flutter/material.dart';
+
 /// Offense Board Map
 Map<String, List<double>> offenseBoard = {"": []};
 
 
 /// Defence Board Map
 Map<String, List<double>> defenseBoard = {"": []};
+
+List<Color> pokemonTypeColors = [
+   Color(0xFFA8A77A),
+   Color(0xFFEE8130),
+   Color(0xFF6390F0),
+   Color(0xFF7AC74C),
+   Color(0xFFF7D02C),
+   Color(0xFF96D9D6),
+   Color(0xFFC22E28),
+   Color(0xFFA33EA1),
+   Color(0xFFE2BF65),
+   Color(0xFFA98FF3),
+   Color(0xFFF95587),
+   Color(0xFFA6B91A),
+   Color(0xFFB6A136),
+   Color(0xFF735797),
+   Color(0xFF6F35FC),
+   Color(0xFF705746),
+   Color(0xFFB7B7CE),
+   Color(0xFFD685AD),
+]; 
 
 /// All pokemon with levitating passive
 List<int> levitatingPokemons = [

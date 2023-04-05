@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pika_dex/cards/pokemon_list_card.dart';
 import 'package:pika_dex/models/pokemon.dart';
+import 'package:pika_dex/themes/app_colors.dart';
 
 class MainPokemonList extends StatefulWidget {
   const MainPokemonList({super.key});
@@ -59,12 +60,14 @@ class _MainPokemonListState extends State<MainPokemonList> {
                 },
               ),
             ),
-            Container(
-              width: double.maxFinite,
-              height: 64,
-              color: Colors.orange,
-            )
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(
+            Icons.add,
+            size: 45,
+          ),
         ),
       ),
     );
