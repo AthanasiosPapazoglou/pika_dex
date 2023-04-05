@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pika_dex/cards/pokemon_list_card.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_colors.dart';
+import 'package:pika_dex/themes/app_themes.dart';
 
 class MainPokemonList extends StatefulWidget {
   const MainPokemonList({super.key});
@@ -44,20 +45,37 @@ class _MainPokemonListState extends State<MainPokemonList> {
       child: Scaffold(
         body: Column(
           children: [
-            Container(
-              width: double.maxFinite,
-              height: 64,
-              color: Colors.green,
+            Padding(
+              padding: EdgeInsets.only(top: 6),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                width: MediaQuery.of(context).size.width - 32,
+                height: 58,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppThemes.darkTheme.hintColor,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.search_rounded, size: 28, color: Colors.white,),
+                    Icon(Icons.settings_rounded, size: 28, color: Colors.white,)
+                  ],
+                ),
+              ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 808,
-                itemBuilder: (context, index) {
-                  return PokemonListCard(
-                    parentalBuilderIndex: index,
-                    pokemonJsonData: decodedPokemonList[index],
-                  );
-                },
+              child: Scrollbar(
+                thickness: 10.0,
+                child: ListView.builder(
+                  itemCount: 808,
+                  itemBuilder: (context, index) {
+                    return PokemonListCard(
+                      parentalBuilderIndex: index,
+                      pokemonJsonData: decodedPokemonList[index],
+                    );
+                  },
+                ),
               ),
             ),
           ],
