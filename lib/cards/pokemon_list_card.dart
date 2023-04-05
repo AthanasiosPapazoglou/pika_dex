@@ -32,7 +32,7 @@ class PokemonListCard extends StatelessWidget {
           );
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           width: double.maxFinite,
           height: 82,
           child: Row(
@@ -46,6 +46,7 @@ class PokemonListCard extends StatelessWidget {
                   width: 64,
                 ),
               ),
+              Text(pokemonJsonData['name']['english']),
               Text('$pokemonId'),
             ],
           ),

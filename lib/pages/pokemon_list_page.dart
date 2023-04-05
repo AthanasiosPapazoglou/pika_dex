@@ -45,7 +45,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
           children: [
             Container(
               width: double.maxFinite,
-              height: 82,
+              height: 64,
               color: Colors.green,
             ),
             Expanded(
@@ -61,7 +61,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
             ),
             Container(
               width: double.maxFinite,
-              height: 48,
+              height: 64,
               color: Colors.orange,
             )
           ],
