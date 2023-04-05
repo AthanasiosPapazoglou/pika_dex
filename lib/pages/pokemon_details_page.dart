@@ -67,7 +67,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
             children: [
               Container(
                 width: double.maxFinite,
-                height: 82,
+                height: 64,
                 color: Colors.green,
               ),
               Container(
