@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
 import 'package:pika_dex/utils/dismiss_swipe.dart';
@@ -18,6 +20,7 @@ class PokemonDetailsPage extends StatefulWidget {
 }
 
 class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
+  TextStyle graphStyle = TextStyle(fontSize: 20);
 
   List<int> quadrupleDamage = [];
   List<int> doubleDamage = [];
@@ -27,9 +30,10 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   List<int> pokemonTypesIndexes = [];
 
-  void getPokemonTypeIndexes (){
-    for (int i =0; i < widget.pokemonJsonData['type'].length; i++){
-      pokemonTypesIndexes.add(parsePokemonTypeTextToIndex(widget.pokemonJsonData['type'][i])); 
+  void getPokemonTypeIndexes() {
+    for (int i = 0; i < widget.pokemonJsonData['type'].length; i++) {
+      pokemonTypesIndexes
+          .add(parsePokemonTypeTextToIndex(widget.pokemonJsonData['type'][i]));
     }
   }
 
@@ -37,13 +41,13 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     for (int i = 0; i < 18; i++) {
       double value = damageMultiplierCalculator(i, pokemonTypesIndexes);
 
-      if(value == 4.0){
+      if (value == 4.0) {
         quadrupleDamage.add(i);
-      } else if (value == 2.0){
+      } else if (value == 2.0) {
         doubleDamage.add(i);
-      } else if (value == 1.0){
+      } else if (value == 1.0) {
         normalDamage.add(i);
-      } else if (value == (1/2)){
+      } else if (value == (1 / 2)) {
         halfDamage.add(i);
       } else {
         quarterDamage.add(i);
@@ -89,32 +93,54 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'x4 $quadrupleDamage',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      Text(
-                        'x2 $doubleDamage',
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      Text(
-                        'x1 $normalDamage',
-                        style: TextStyle(color: Colors.yellow),
-                      ),
-                      Text(
-                        'x1/2 $halfDamage',
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                      Text(
-                        'x1/4 $quarterDamage',
-                        style: TextStyle(color: Colors.red),
-                      ),
+                      greyAreaTypesPlacement('x4', Colors.blue, context),
+                      greyAreaTypesPlacement('x2', Colors.green, context),
+                      greyAreaTypesPlacement('x1', Colors.yellow, context),
+                      greyAreaTypesPlacement('x1/2', Colors.orange, context),
+                      greyAreaTypesPlacement('x1/4', Colors.red, context),
+                      greyAreaTypesPlacement(
+                          'x0', Colors.grey.shade600, context),
                     ],
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Flexible greyAreaTypesPlacement(
+      String multiplier, Color colorData, BuildContext context) {
+    return Flexible(
+      flex: 1,
+      child: Container(
+        width: double.maxFinite,
+        color: colorData,
+        child: Row(
+          children: [
+            Container(
+              width: 64,
+              child: Center(
+                child: Text(
+                  multiplier,
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Container(
+                height: 56,
+                width: MediaQuery.of(context).size.width - 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.grey.shade400,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
