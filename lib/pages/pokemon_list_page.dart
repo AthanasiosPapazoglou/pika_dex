@@ -66,7 +66,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
             ),
             Expanded(
               child: Scrollbar(
-                thickness: 10.0,
+                thickness: 26.0,
                 child: ListView.builder(
                   itemCount: 808,
                   itemBuilder: (context, index) {

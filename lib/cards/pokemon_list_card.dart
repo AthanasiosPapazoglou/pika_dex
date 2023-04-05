@@ -17,7 +17,7 @@ class PokemonListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     int pokemonId = parentalBuilderIndex + 1;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 8, 32, 8),
       child: InkWell(
         onTap: () {
           Navigator.push(
