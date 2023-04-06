@@ -44,7 +44,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
   void initState() {
     super.initState();
     getJsonFromFile();
-    filteredPokemonList = List.from(decodedPokemonList);
+    // filteredPokemonList = List.from(decodedPokemonList);
     _scrollbarController = ScrollController();
     _textfieldController = TextEditingController();
   }
