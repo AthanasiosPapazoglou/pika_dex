@@ -105,12 +105,13 @@ class _MainPokemonListState extends State<MainPokemonList> {
             ),
             Expanded(
               child: DraggableScrollbar.arrows(
+                alwaysVisibleScrollThumb: true,
                 labelTextBuilder: (double offset) => Text("${offset ~/ 100}"),
                 controller: _scrollbarController,
                 backgroundColor: AppThemes.darkTheme.primaryColor,
                 child: ListView.builder(
                   controller: _scrollbarController,
-                  itemCount: 808,
+                  itemCount: 809,
                   itemBuilder: (context, index) {
                     return PokemonListCard(
                       parentalBuilderIndex: index,
