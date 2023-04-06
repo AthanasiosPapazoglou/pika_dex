@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:pika_dex/cards/pokemon_list_card.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_colors.dart';
 import 'package:pika_dex/themes/app_themes.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 
 class MainPokemonList extends StatefulWidget {
   const MainPokemonList({super.key});
@@ -22,7 +25,11 @@ populateModelisedList(dynamic jsonList, List<Pokemon> modelisedList) {
 
 class _MainPokemonListState extends State<MainPokemonList> {
   late var decodedPokemonList;
+  late var filteredPokemonList;
+
   late List<Pokemon> modelisedPokemonList;
+  late ScrollController _scrollbarController;
+  late TextEditingController _textfieldController;
 
   Future<String> getJsonFromFile() async {
     final String response = await rootBundle.loadString('assets/pokedex.json');
@@ -37,6 +44,15 @@ class _MainPokemonListState extends State<MainPokemonList> {
   void initState() {
     super.initState();
     getJsonFromFile();
+    filteredPokemonList = List.from(decodedPokemonList);
+    _scrollbarController = ScrollController();
+    _textfieldController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollbarController.dispose();
   }
 
   @override
@@ -46,7 +62,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
         body: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 6),
+              padding: EdgeInsets.only(top: 8, bottom: 8),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 width: MediaQuery.of(context).size.width - 32,
@@ -55,19 +71,41 @@ class _MainPokemonListState extends State<MainPokemonList> {
                   borderRadius: BorderRadius.circular(12),
                   color: AppThemes.darkTheme.hintColor,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.search_rounded, size: 28, color: Colors.white,),
-                    Icon(Icons.settings_rounded, size: 28, color: Colors.white,)
-                  ],
+                child: Center(
+                  child: TextField(
+                    onChanged: (value){
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Search Pokemon Name or Id',
+                      hintStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.settings_rounded,
+                          color: Colors.black,
+                        ),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search_rounded,
+                        color: Colors.black,
+                      ),
+                      contentPadding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 8),
+                    ),
+                  ),
                 ),
               ),
             ),
             Expanded(
-              child: Scrollbar(
-                thickness: 26.0,
+              child: DraggableScrollbar.arrows(
+                labelTextBuilder: (double offset) => Text("${offset ~/ 100}"),
+                controller: _scrollbarController,
+                backgroundColor: AppThemes.darkTheme.primaryColor,
                 child: ListView.builder(
+                  controller: _scrollbarController,
                   itemCount: 808,
                   itemBuilder: (context, index) {
                     return PokemonListCard(
