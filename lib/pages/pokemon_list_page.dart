@@ -60,8 +60,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
   @override
   Widget build(BuildContext context) {
     populateModelisedList(decodedPokemonList, modelisedPokemonList);
-    print(modelisedPokemonList[24].name!.english);
-
+    // print('rebuild');
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -115,7 +114,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
                   itemBuilder: (context, index) {
                     return PokemonListCard(
                       parentalBuilderIndex: index,
-                      pokemonJsonData: decodedPokemonList[index],
+                      modelisedPokemon: modelisedPokemonList[index],
                     );
                   },
                 ),

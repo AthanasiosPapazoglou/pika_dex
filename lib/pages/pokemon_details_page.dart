@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
+import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_colors.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:pika_dex/utils/dismiss_swipe.dart';
@@ -11,11 +12,11 @@ class PokemonDetailsPage extends StatefulWidget {
       {super.key,
       required this.imagePath,
       required this.pokemonId,
-      required this.pokemonJsonData});
+      required this.modelisedPokemon});
 
   final String imagePath;
   final int pokemonId;
-  final dynamic pokemonJsonData;
+  final Pokemon modelisedPokemon;
 
   @override
   State<PokemonDetailsPage> createState() => _PokemonDetailsPageState();
@@ -35,10 +36,10 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   List<int> pokemonTypeIndexes = [];
 
   void getPokemonTypes() {
-    for (int i = 0; i < widget.pokemonJsonData['type'].length; i++) {
+    for (int i = 0; i < (widget.modelisedPokemon.type?.length ?? 1); i++) {
       pokemonTypeIndexes
-          .add(parsePokemonTypeTextToIndex(widget.pokemonJsonData['type'][i]));
-      pokemonTypeTexts.add(widget.pokemonJsonData['type'][i]);
+          .add(parsePokemonTypeTextToIndex(widget.modelisedPokemon.type?[i] ?? ''));
+      pokemonTypeTexts.add(widget.modelisedPokemon.type?[i] ?? '');
     }
   }
 
@@ -97,7 +98,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                       ),
                     ),
                     Text(
-                      widget.pokemonJsonData['name']['english'],
+                      widget.modelisedPokemon.name?.english ?? '',
                       style:  TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: pokemonTypeColors[parsePokemonTypeTextToIndex(
-                        widget.pokemonJsonData['type'][0])]),
+                        widget.modelisedPokemon.type?[0] ?? '')]),
                 child: Hero(
                   tag: widget.pokemonId,
                   child: Image.asset(

@@ -8,6 +8,7 @@ Map<String, List<double>> offenseBoard = {"": []};
 /// Defence Board Map
 Map<String, List<double>> defenseBoard = {"": []};
 
+/// Pokemon Type Colors for Pokemon List Card background coloring
 List<Color> pokemonTypeColors = [
    Color(0xFFA8A77A),
    Color(0xFFEE8130),

@@ -2,16 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
+import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/pages/pokemon_details_page.dart';
 
 class PokemonListCard extends StatelessWidget {
   const PokemonListCard(
       {super.key,
       required this.parentalBuilderIndex,
-      required this.pokemonJsonData});
+      required this.modelisedPokemon});
 
   final int parentalBuilderIndex;
-  final dynamic pokemonJsonData;
+  final Pokemon modelisedPokemon;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +26,9 @@ class PokemonListCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => PokemonDetailsPage(
                   imagePath:
-                      'assets/images/${imageNumberCorrector(pokemonId)}$pokemonId.png',
+                      'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
                   pokemonId: pokemonId,
-                  pokemonJsonData: pokemonJsonData),
+                  modelisedPokemon: modelisedPokemon),
             ),
           );
         },
@@ -41,20 +42,20 @@ class PokemonListCard extends StatelessWidget {
               Hero(
                 tag: pokemonId,
                 child: Image.asset(
-                  'assets/images/${imageNumberCorrector(pokemonId)}$pokemonId.png',
+                  'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
                   height: 64,
                   width: 64,
                 ),
               ),
               Text(
-                pokemonJsonData['name']['english'],
+                modelisedPokemon.name?.english ?? '',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                '$pokemonId',
+                '${(modelisedPokemon.id ?? 0)}',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -65,7 +66,7 @@ class PokemonListCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: pokemonTypeColors[
-                parsePokemonTypeTextToIndex(pokemonJsonData['type'][0])],
+                parsePokemonTypeTextToIndex(modelisedPokemon.type?[0] ?? '')],
           ),
         ),
       ),
