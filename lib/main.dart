@@ -21,6 +21,11 @@ class PikaDex extends StatefulWidget {
 class _PikaDexState extends State<PikaDex> {
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return MaterialApp(

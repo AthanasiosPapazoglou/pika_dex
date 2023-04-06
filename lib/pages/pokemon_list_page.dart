@@ -11,7 +11,10 @@ import 'package:pika_dex/themes/app_themes.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 
 class MainPokemonList extends StatefulWidget {
-  const MainPokemonList({super.key});
+  const MainPokemonList({
+    super.key,
+  });
+
 
   @override
   State<MainPokemonList> createState() => _MainPokemonListState();
@@ -27,7 +30,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
   late var decodedPokemonList;
   late var filteredPokemonList;
 
-  late List<Pokemon> modelisedPokemonList;
+  List<Pokemon> modelisedPokemonList = [];
   late ScrollController _scrollbarController;
   late TextEditingController _textfieldController;
 
@@ -44,7 +47,6 @@ class _MainPokemonListState extends State<MainPokemonList> {
   void initState() {
     super.initState();
     getJsonFromFile();
-    // filteredPokemonList = List.from(decodedPokemonList);
     _scrollbarController = ScrollController();
     _textfieldController = TextEditingController();
   }
@@ -57,6 +59,9 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   @override
   Widget build(BuildContext context) {
+    populateModelisedList(decodedPokemonList, modelisedPokemonList);
+    print(modelisedPokemonList[24].name!.english);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -73,8 +78,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
                 ),
                 child: Center(
                   child: TextField(
-                    onChanged: (value){
-                    },
+                    onChanged: (value) {},
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search Pokemon Name or Id',
@@ -93,7 +97,8 @@ class _MainPokemonListState extends State<MainPokemonList> {
                         Icons.search_rounded,
                         color: Colors.black,
                       ),
-                      contentPadding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 8),
+                      contentPadding:
+                          EdgeInsetsDirectional.fromSTEB(0, 10, 0, 8),
                     ),
                   ),
                 ),
