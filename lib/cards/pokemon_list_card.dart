@@ -8,15 +8,12 @@ import 'package:pika_dex/pages/pokemon_details_page.dart';
 class PokemonListCard extends StatelessWidget {
   const PokemonListCard(
       {super.key,
-      required this.parentalBuilderIndex,
       required this.modelisedPokemon});
 
-  final int parentalBuilderIndex;
   final Pokemon modelisedPokemon;
 
   @override
   Widget build(BuildContext context) {
-    int pokemonId = parentalBuilderIndex + 1;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 22, 8),
       child: InkWell(
@@ -27,7 +24,6 @@ class PokemonListCard extends StatelessWidget {
               builder: (context) => PokemonDetailsPage(
                   imagePath:
                       'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
-                  pokemonId: pokemonId,
                   modelisedPokemon: modelisedPokemon),
             ),
           );
@@ -40,7 +36,7 @@ class PokemonListCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Hero(
-                tag: pokemonId,
+                tag: modelisedPokemon.id ?? 0,
                 child: Image.asset(
                   'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
                   height: 64,

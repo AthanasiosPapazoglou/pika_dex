@@ -11,11 +11,9 @@ class PokemonDetailsPage extends StatefulWidget {
   const PokemonDetailsPage(
       {super.key,
       required this.imagePath,
-      required this.pokemonId,
       required this.modelisedPokemon});
 
   final String imagePath;
-  final int pokemonId;
   final Pokemon modelisedPokemon;
 
   @override
@@ -46,7 +44,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   void populatePokemonDamageLists() {
     for (int i = 0; i < 18; i++) {
       double value = damageMultiplierCalculator(
-          i, pokemonTypeIndexes, checkIfPokemonIsLevitating(widget.pokemonId));
+          i, pokemonTypeIndexes, checkIfPokemonIsLevitating(widget.modelisedPokemon.id ?? 0));
 
       if (value == 4.0) {
         quadrupleDamage.add(pokemonTypes[i]);
@@ -117,7 +115,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                     color: pokemonTypeColors[parsePokemonTypeTextToIndex(
                         widget.modelisedPokemon.type?[0] ?? '')]),
                 child: Hero(
-                  tag: widget.pokemonId,
+                  tag: widget.modelisedPokemon.id ?? 0,
                   child: Image.asset(
                     widget.imagePath,
                     height: 250,

@@ -160,7 +160,6 @@ class _MainPokemonListState extends State<MainPokemonList> {
                   itemCount: filteredPokemonList.length,
                   itemBuilder: (context, index) {
                     return PokemonListCard(
-                      parentalBuilderIndex: index,
                       modelisedPokemon: filteredPokemonList[index],
                     );
                   },
