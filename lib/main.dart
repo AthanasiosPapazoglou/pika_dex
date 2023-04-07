@@ -30,8 +30,8 @@ class _PikaDexState extends State<PikaDex> {
 
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
+      theme: AppThemes.darkTheme,
+      darkTheme: AppThemes.lightTheme,
       home: MainPokemonList(),
     );
   }

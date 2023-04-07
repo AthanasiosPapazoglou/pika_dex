@@ -58,7 +58,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
         : filteredPokemonList.removeWhere((element) =>
             !(element.name!.english ?? '')
                 .toLowerCase()
-                .contains(_textfieldController.text));
+                .contains((_textfieldController.text).toLowerCase()));
   }
 
   void resetFilteredList() {
@@ -68,6 +68,30 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   bool isNumeric(String s) {
     return double.tryParse(s) != null;
+  }
+
+  void firstBuildDataInitilizer() {
+    if (isFirstBuild) {
+      setState(() {
+        populateModelisedList();
+        resetFilteredList();
+        isFirstBuild = false;
+      });
+    } else {
+      return;
+    }
+  }
+
+  void textFieldInputLogicCoordinator() {
+    setState(() {
+      if (_textfieldController.text.length < textFieldInputLength) {
+        resetFilteredList();
+        textFieldInputLength--;
+      } else {
+        textFieldInputLength++;
+      }
+      processFilteredList();
+    });
   }
 
   //! Init/Dispose
@@ -87,14 +111,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   @override
   Widget build(BuildContext context) {
-    if (isFirstBuild) {
-      setState(() {
-        populateModelisedList();
-        resetFilteredList();
-        isFirstBuild = false;
-      });
-    }
-
+    firstBuildDataInitilizer();
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -112,18 +129,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
                 child: Center(
                   child: TextField(
                     controller: _textfieldController,
-                    onChanged: (value) {
-                      setState(() {
-                        if (_textfieldController.text.length <
-                            textFieldInputLength) {
-                          resetFilteredList();
-                          textFieldInputLength--;
-                        } else {
-                          textFieldInputLength++;
-                        }
-                        processFilteredList();
-                      });
-                    },
+                    onChanged: (value) => textFieldInputLogicCoordinator(),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search Pokemon Name or Id',
