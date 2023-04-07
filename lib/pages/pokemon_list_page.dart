@@ -128,7 +128,7 @@ class _MainPokemonListState extends State<MainPokemonList> {
                       border: InputBorder.none,
                       hintText: 'Search Pokemon Name or Id',
                       hintStyle: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 15,
                       ),
                       suffixIcon: GestureDetector(
