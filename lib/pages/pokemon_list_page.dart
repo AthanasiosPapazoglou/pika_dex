@@ -52,14 +52,22 @@ class _MainPokemonListState extends State<MainPokemonList> {
   }
 
   void processFilteredList() {
-    filteredPokemonList.removeWhere((element) => !(element.name!.english ?? '')
-        .toLowerCase()
-        .contains(_textfieldController.text));
+    isNumeric(_textfieldController.text)
+        ? filteredPokemonList.removeWhere((element) =>
+            !(element.id ?? '').toString().contains(_textfieldController.text))
+        : filteredPokemonList.removeWhere((element) =>
+            !(element.name!.english ?? '')
+                .toLowerCase()
+                .contains(_textfieldController.text));
   }
 
   void resetFilteredList() {
     filteredPokemonList.clear();
     filteredPokemonList = List.from(modelisedPokemonList);
+  }
+
+  bool isNumeric(String s) {
+    return double.tryParse(s) != null;
   }
 
   //! Init/Dispose
@@ -79,7 +87,6 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   @override
   Widget build(BuildContext context) {
-
     if (isFirstBuild) {
       setState(() {
         populateModelisedList();
@@ -88,7 +95,6 @@ class _MainPokemonListState extends State<MainPokemonList> {
       });
     }
 
-    print('rebuild');
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -107,8 +113,6 @@ class _MainPokemonListState extends State<MainPokemonList> {
                   child: TextField(
                     controller: _textfieldController,
                     onChanged: (value) {
-                      print('flag: $textFieldInputLength');
-                      print('property: ${_textfieldController.text.length}');
                       setState(() {
                         if (_textfieldController.text.length <
                             textFieldInputLength) {
