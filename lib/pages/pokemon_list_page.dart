@@ -15,25 +15,27 @@ class MainPokemonList extends StatefulWidget {
     super.key,
   });
 
-
   @override
   State<MainPokemonList> createState() => _MainPokemonListState();
 }
 
-populateModelisedList(dynamic jsonList, List<Pokemon> modelisedList) {
-  for (int i = 0; i < 809; i++) {
-    modelisedList.add(Pokemon.fromJson(jsonList[i]));
-  }
-}
-
 class _MainPokemonListState extends State<MainPokemonList> {
-  late var decodedPokemonList;
-  late var filteredPokemonList;
+  //! Flags
+  bool isFirstBuild = true;
+  int textFieldInputLength = 0;
 
+  //! Json Data
+  late var decodedPokemonList;
+
+  //! Modelised Lists
   List<Pokemon> modelisedPokemonList = [];
+  List<Pokemon> filteredPokemonList = [];
+
+  //! Controllers
   late ScrollController _scrollbarController;
   late TextEditingController _textfieldController;
 
+  //! Functions
   Future<String> getJsonFromFile() async {
     final String response = await rootBundle.loadString('assets/pokedex.json');
     final items = jsonDecode(response);
@@ -43,6 +45,24 @@ class _MainPokemonListState extends State<MainPokemonList> {
     return response;
   }
 
+  void populateModelisedList() {
+    for (int i = 0; i < 809; i++) {
+      modelisedPokemonList.add(Pokemon.fromJson(decodedPokemonList[i]));
+    }
+  }
+
+  void processFilteredList() {
+    filteredPokemonList.removeWhere((element) => !(element.name!.english ?? '')
+        .toLowerCase()
+        .contains(_textfieldController.text));
+  }
+
+  void resetFilteredList() {
+    filteredPokemonList.clear();
+    filteredPokemonList = List.from(modelisedPokemonList);
+  }
+
+  //! Init/Dispose
   @override
   void initState() {
     super.initState();
@@ -59,8 +79,16 @@ class _MainPokemonListState extends State<MainPokemonList> {
 
   @override
   Widget build(BuildContext context) {
-    populateModelisedList(decodedPokemonList, modelisedPokemonList);
-    // print('rebuild');
+
+    if (isFirstBuild) {
+      setState(() {
+        populateModelisedList();
+        resetFilteredList();
+        isFirstBuild = false;
+      });
+    }
+
+    print('rebuild');
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -77,7 +105,21 @@ class _MainPokemonListState extends State<MainPokemonList> {
                 ),
                 child: Center(
                   child: TextField(
-                    onChanged: (value) {},
+                    controller: _textfieldController,
+                    onChanged: (value) {
+                      print('flag: $textFieldInputLength');
+                      print('property: ${_textfieldController.text.length}');
+                      setState(() {
+                        if (_textfieldController.text.length <
+                            textFieldInputLength) {
+                          resetFilteredList();
+                          textFieldInputLength--;
+                        } else {
+                          textFieldInputLength++;
+                        }
+                        processFilteredList();
+                      });
+                    },
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search Pokemon Name or Id',
@@ -111,11 +153,11 @@ class _MainPokemonListState extends State<MainPokemonList> {
                 backgroundColor: AppThemes.darkTheme.primaryColor,
                 child: ListView.builder(
                   controller: _scrollbarController,
-                  itemCount: 809,
+                  itemCount: filteredPokemonList.length,
                   itemBuilder: (context, index) {
                     return PokemonListCard(
                       parentalBuilderIndex: index,
-                      modelisedPokemon: modelisedPokemonList[index],
+                      modelisedPokemon: filteredPokemonList[index],
                     );
                   },
                 ),
