@@ -3,12 +3,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:pika_dex/cards/pokemon_list_card.dart';
+import 'package:pika_dex/components/common.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_colors.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
 
 class MainPokemonList extends StatefulWidget {
   const MainPokemonList({
@@ -19,7 +22,8 @@ class MainPokemonList extends StatefulWidget {
   State<MainPokemonList> createState() => _MainPokemonListState();
 }
 
-class _MainPokemonListState extends State<MainPokemonList> {
+class _MainPokemonListState extends State<MainPokemonList>
+    with TickerProviderStateMixin {
   //! Flags
   bool isFirstBuild = true;
   int textFieldInputLength = 0;
@@ -34,6 +38,8 @@ class _MainPokemonListState extends State<MainPokemonList> {
   //! Controllers
   late ScrollController _scrollbarController;
   late TextEditingController _textfieldController;
+  late Animation<double> _animation;
+  late AnimationController _animationController;
 
   //! Functions
   Future<String> getJsonFromFile() async {
@@ -101,6 +107,15 @@ class _MainPokemonListState extends State<MainPokemonList> {
     getJsonFromFile();
     _scrollbarController = ScrollController();
     _textfieldController = TextEditingController();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   }
 
   @override
@@ -174,12 +189,37 @@ class _MainPokemonListState extends State<MainPokemonList> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(
-            Icons.add,
-            size: 45,
-          ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionBubble(
+          items: <Bubble>[
+            Bubble(
+              title: "By Id",
+              iconColor: setThemePrimary(),
+              bubbleColor: setThemeBackground(),
+              icon: Icons.settings,
+              titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
+              onPress: () {
+                _animationController.reverse();
+              },
+            ),
+            Bubble(
+              title: "By Type",
+              iconColor: setThemePrimary(),
+              bubbleColor: setThemeBackground(),
+              icon: Icons.people,
+              titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
+              onPress: () {
+                _animationController.reverse();
+              },
+            ),
+          ],
+          animation: _animation,
+          onPress: () => _animationController.isCompleted
+              ? _animationController.reverse()
+              : _animationController.forward(),
+          iconColor: setThemePrimary(),
+          iconData: Icons.sort_rounded,
+          backGroundColor: setThemeBackground(),
         ),
       ),
     );

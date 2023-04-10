@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.5
   flex_color_scheme: ^6.1.2
   draggable_scrollbar: ^0.1.0
+  floating_action_bubble: ^1.1.4
 
 dev_dependencies:
   flutter_test:
