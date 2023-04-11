@@ -39,16 +39,16 @@ class _MainPokemonListState extends State<MainPokemonList>
   List<bool> activeTypeFilters = [
     true,
     true,
-    false,
     true,
     true,
     true,
     true,
-    false,
     true,
     true,
     true,
-    false,
+    true,
+    true,
+    true,
     true,
     true,
     true,
@@ -122,6 +122,18 @@ class _MainPokemonListState extends State<MainPokemonList>
     });
   }
 
+  void filterModalSheetLogicCoordinator() {
+    setState(() {
+      resetFilteredList();
+      for (int i = 0; i < 18; i++) {
+        if (!activeTypeFilters[i]) {
+          filteredPokemonList.removeWhere(
+              (element) => (element.type ?? []).contains(pokemonTypes[i]));
+        }
+      }
+    });
+  }
+
   //! Init/Dispose
   @override
   void initState() {
@@ -181,6 +193,7 @@ class _MainPokemonListState extends State<MainPokemonList>
                             context: context,
                             builder: (BuildContext context) {
                               return GestureDetector(
+                                behavior: HitTestBehavior.opaque,
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
@@ -192,56 +205,62 @@ class _MainPokemonListState extends State<MainPokemonList>
                                     itemCount: 18,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            16, 6, 16, 6),
-                                        child: Container(
-                                          color: activeTypeFilters[index]
-                                              ? pokemonTypeColors[index]
-                                              : Colors.grey.shade400,
-                                          height: 48,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 8),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    color:
-                                                        activeTypeFilters[index]
-                                                            ? Colors.green
-                                                            : Colors.red,
-                                                  ),
-                                                  child: InkWell(
-                                                    onTap: (){
-                                                      setState(() {
-                                                        activeTypeFilters[index] = !activeTypeFilters[index];
-                                                      });
-                                                    },
-                                                      child: Center(
-                                                    child: Icon(
+                                      return InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            activeTypeFilters[index] =
+                                                !activeTypeFilters[index];
+                                          });
+                                          filterModalSheetLogicCoordinator();
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16, 6, 16, 6),
+                                          child: Container(
+                                            color: activeTypeFilters[index]
+                                                ? pokemonTypeColors[index]
+                                                : Colors.grey.shade400,
+                                            height: 48,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 8),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
+                                                      color: activeTypeFilters[
+                                                              index]
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                    ),
+                                                    child: Center(
+                                                      child: Icon(
                                                         activeTypeFilters[index]
                                                             ? Icons
                                                                 .check_rounded
                                                             : Icons
-                                                                .cancel_outlined),
-                                                  )),
-                                                  height: 32,
-                                                  width: 32,
+                                                                .cancel_outlined,
+                                                      ),
+                                                    ),
+                                                    height: 32,
+                                                    width: 32,
+                                                  ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 8),
-                                                child: Image.asset(
-                                                    'assets/type_badges/${pokemonTypes[index]}.png'),
-                                              )
-                                            ],
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(right: 8),
+                                                  child: Image.asset(
+                                                      'assets/type_badges/${pokemonTypes[index]}.png'),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );
