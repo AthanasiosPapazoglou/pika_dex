@@ -35,7 +35,7 @@ class _MainPokemonListState extends State<MainPokemonList>
   List<Pokemon> modelisedPokemonList = [];
   List<Pokemon> filteredPokemonList = [];
 
-  //! Flag List & callback
+  //! Flag List
   List<bool> activeTypeFilters = [
     true,
     true,
@@ -62,6 +62,13 @@ class _MainPokemonListState extends State<MainPokemonList>
   late TextEditingController _textfieldController;
   late Animation<double> _animation;
   late AnimationController _animationController;
+
+  //! Callbacks
+  changeFilterListCallback(int indexNum) {
+    setState(() {
+      activeTypeFilters[indexNum] = !activeTypeFilters[indexNum];
+    });
+  }
 
   //! Functions
   Future<String> getJsonFromFile() async {
@@ -192,82 +199,86 @@ class _MainPokemonListState extends State<MainPokemonList>
                             backgroundColor: setThemePrimary(),
                             context: context,
                             builder: (BuildContext context) {
-                              return GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.6,
-                                  width: double.maxFinite,
-                                  child: ListView.builder(
-                                    itemCount: 18,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            activeTypeFilters[index] =
-                                                !activeTypeFilters[index];
-                                          });
-                                          filterModalSheetLogicCoordinator();
-                                        },
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 6, 16, 6),
-                                          child: Container(
-                                            color: activeTypeFilters[index]
-                                                ? pokemonTypeColors[index]
-                                                : Colors.grey.shade400,
-                                            height: 48,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 8),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              6),
-                                                      color: activeTypeFilters[
-                                                              index]
-                                                          ? Colors.green
-                                                          : Colors.red,
-                                                    ),
-                                                    child: Center(
-                                                      child: Icon(
-                                                        activeTypeFilters[index]
-                                                            ? Icons
-                                                                .check_rounded
-                                                            : Icons
-                                                                .cancel_outlined,
-                                                      ),
-                                                    ),
-                                                    height: 32,
-                                                    width: 32,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.only(right: 8),
-                                                  child: Image.asset(
-                                                      'assets/type_badges/${pokemonTypes[index]}.png'),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                              return TypeFilteringModal(
+                                filterListCallback: changeFilterListCallback,
+                                modalSheetLogicCoordinator: filterModalSheetLogicCoordinator,
                               );
+                              // return GestureDetector(
+                              //   behavior: HitTestBehavior.opaque,
+                              //   onTap: () {
+                              //     Navigator.pop(context);
+                              //   },
+                              //   child: Container(
+                              //     height:
+                              //         MediaQuery.of(context).size.height * 0.6,
+                              //     width: double.maxFinite,
+                              //     child: ListView.builder(
+                              //       itemCount: 18,
+                              //       itemBuilder:
+                              //           (BuildContext context, int index) {
+                              //         return InkWell(
+                              //           onTap: () {
+                              //             // setState(() {
+                              //             //   activeTypeFilters[index] =
+                              //             //       !activeTypeFilters[index];
+                              //             // });
+                              //             filterModalSheetLogicCoordinator();
+                              //           },
+                              //           child: Padding(
+                              //             padding:
+                              //                 EdgeInsetsDirectional.fromSTEB(
+                              //                     16, 6, 16, 6),
+                              //             child: Container(
+                              //               color: activeTypeFilters[index]
+                              //                   ? pokemonTypeColors[index]
+                              //                   : Colors.grey.shade400,
+                              //               height: 48,
+                              //               child: Row(
+                              //                 mainAxisAlignment:
+                              //                     MainAxisAlignment
+                              //                         .spaceBetween,
+                              //                 children: [
+                              //                   Padding(
+                              //                     padding:
+                              //                         EdgeInsets.only(left: 8),
+                              //                     child: Container(
+                              //                       decoration: BoxDecoration(
+                              //                         borderRadius:
+                              //                             BorderRadius.circular(
+                              //                                 6),
+                              //                         color: activeTypeFilters[
+                              //                                 index]
+                              //                             ? Colors.green
+                              //                             : Colors.red,
+                              //                       ),
+                              //                       child: Center(
+                              //                         child: Icon(
+                              //                           activeTypeFilters[index]
+                              //                               ? Icons
+                              //                                   .check_rounded
+                              //                               : Icons
+                              //                                   .cancel_outlined,
+                              //                         ),
+                              //                       ),
+                              //                       height: 32,
+                              //                       width: 32,
+                              //                     ),
+                              //                   ),
+                              //                   Padding(
+                              //                     padding:
+                              //                         EdgeInsets.only(right: 8),
+                              //                     child: Image.asset(
+                              //                         'assets/type_badges/${pokemonTypes[index]}.png'),
+                              //                   )
+                              //                 ],
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         );
+                              //       },
+                              //     ),
+                              //   ),
+                              // );
                             },
                           );
                         },

@@ -4,14 +4,41 @@ import 'package:pika_dex/themes/app_themes.dart';
 
 class TypeFilteringModal extends StatefulWidget {
   const TypeFilteringModal({
+    required this.filterListCallback,
+    required this.modalSheetLogicCoordinator,
     Key? key,
   }) : super(key: key);
+
+  final Function filterListCallback;
+  final Function modalSheetLogicCoordinator;
 
   @override
   State<TypeFilteringModal> createState() => _TypeFilteringModalState();
 }
 
 class _TypeFilteringModalState extends State<TypeFilteringModal> {
+
+  List<bool> activeTypeFilters = [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,18 +54,20 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                // setState(() {
-                //   activeTypeFilters[index] =
-                //       !activeTypeFilters[index];
-                // });
+                widget.filterListCallback(index);
+                widget.modalSheetLogicCoordinator();
+                setState(() {
+                  activeTypeFilters[index] =
+                      !activeTypeFilters[index];
+                });
                 // filterModalSheetLogicCoordinator();
               },
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 6, 16, 6),
                 child: Container(
-                  // color: activeTypeFilters[index]
-                  //     ? pokemonTypeColors[index]
-                  //     : Colors.grey.shade400,
+                  color: activeTypeFilters[index]
+                      ? pokemonTypeColors[index]
+                      : Colors.grey.shade400,
                   height: 48,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,18 +78,18 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
                             color:
-                                // activeTypeFilters[
-                                //         index]
-                                //     ? Colors.green
-                                //     :
+                                activeTypeFilters[
+                                        index]
+                                    ? Colors.green
+                                    :
                                 Colors.red,
                           ),
                           child: Center(
                             child: Icon(
-                              // activeTypeFilters[index]
-                              //     ? Icons
-                              //         .check_rounded
-                              //     :
+                              activeTypeFilters[index]
+                                  ? Icons
+                                      .check_rounded
+                                  :
                               Icons.cancel_outlined,
                             ),
                           ),
