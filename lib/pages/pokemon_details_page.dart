@@ -116,11 +116,12 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                         widget.modelisedPokemon.type?[0] ?? '')]),
                 child: Hero(
                   tag: widget.modelisedPokemon.id ?? 0,
-                  child: Image.asset(
-                    widget.imagePath,
-                    height: 250,
-                    width: 250,
-                  ),
+                  child: Image.asset('assets/app_icon.jpeg'),
+                  // Image.asset(
+                  //   widget.imagePath,
+                  //   height: 250,
+                  //   width: 250,
+                  // ),
                 ),
               ),
               pokemonTypeBadgetsRow(context),

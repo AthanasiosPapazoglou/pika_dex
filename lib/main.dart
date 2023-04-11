@@ -17,9 +17,7 @@ class PikaDex extends StatefulWidget {
   State<PikaDex> createState() => _PikaDexState();
 }
 
-
 class _PikaDexState extends State<PikaDex> {
-
   @override
   void initState() {
     super.initState();
@@ -27,13 +25,11 @@ class _PikaDexState extends State<PikaDex> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: AppThemes.darkTheme,
       darkTheme: AppThemes.lightTheme,
-      home: MainPokemonList(),
+      home: Scaffold(body: MainPokemonList()),
     );
   }
 }
-

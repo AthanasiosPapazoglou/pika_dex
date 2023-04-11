@@ -3,12 +3,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:pika_dex/cards/pokemon_list_card.dart';
 import 'package:pika_dex/components/common.dart';
+import 'package:pika_dex/data/type_dynamics.dart';
+import 'package:pika_dex/modals/type_filtering.dart';
 import 'package:pika_dex/models/pokemon.dart';
-import 'package:pika_dex/themes/app_colors.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
@@ -34,6 +34,28 @@ class _MainPokemonListState extends State<MainPokemonList>
   //! Modelised Lists
   List<Pokemon> modelisedPokemonList = [];
   List<Pokemon> filteredPokemonList = [];
+
+  //! Flag List & callback
+  List<bool> activeTypeFilters = [
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+  ];
 
   //! Controllers
   late ScrollController _scrollbarController;
@@ -127,9 +149,9 @@ class _MainPokemonListState extends State<MainPokemonList>
   @override
   Widget build(BuildContext context) {
     firstBuildDataInitilizer();
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           children: [
             Padding(
               padding: EdgeInsets.only(top: 8, bottom: 8),
@@ -153,14 +175,92 @@ class _MainPokemonListState extends State<MainPokemonList>
                         fontSize: 15,
                       ),
                       suffixIcon: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          showModalBottomSheet(
+                            backgroundColor: setThemePrimary(),
+                            context: context,
+                            builder: (BuildContext context) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.6,
+                                  width: double.maxFinite,
+                                  child: ListView.builder(
+                                    itemCount: 18,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16, 6, 16, 6),
+                                        child: Container(
+                                          color: activeTypeFilters[index]
+                                              ? pokemonTypeColors[index]
+                                              : Colors.grey.shade400,
+                                          height: 48,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 8),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                    color:
+                                                        activeTypeFilters[index]
+                                                            ? Colors.green
+                                                            : Colors.red,
+                                                  ),
+                                                  child: InkWell(
+                                                    onTap: (){
+                                                      setState(() {
+                                                        activeTypeFilters[index] = !activeTypeFilters[index];
+                                                      });
+                                                    },
+                                                      child: Center(
+                                                    child: Icon(
+                                                        activeTypeFilters[index]
+                                                            ? Icons
+                                                                .check_rounded
+                                                            : Icons
+                                                                .cancel_outlined),
+                                                  )),
+                                                  height: 32,
+                                                  width: 32,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 8),
+                                                child: Image.asset(
+                                                    'assets/type_badges/${pokemonTypes[index]}.png'),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                         child: Icon(
-                          Icons.settings_rounded,
+                          Icons.edit_note_rounded,
+                          size: 30,
                           color: Colors.black,
                         ),
                       ),
                       prefixIcon: Icon(
                         Icons.search_rounded,
+                        size: 30,
                         color: Colors.black,
                       ),
                       contentPadding:
@@ -189,38 +289,38 @@ class _MainPokemonListState extends State<MainPokemonList>
             ),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionBubble(
-          items: <Bubble>[
-            Bubble(
-              title: "By Id",
-              iconColor: setThemePrimary(),
-              bubbleColor: setThemeBackground(),
-              icon: Icons.settings,
-              titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
-              onPress: () {
-                _animationController.reverse();
-              },
-            ),
-            Bubble(
-              title: "By Type",
-              iconColor: setThemePrimary(),
-              bubbleColor: setThemeBackground(),
-              icon: Icons.people,
-              titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
-              onPress: () {
-                _animationController.reverse();
-              },
-            ),
-          ],
-          animation: _animation,
-          onPress: () => _animationController.isCompleted
-              ? _animationController.reverse()
-              : _animationController.forward(),
-          iconColor: setThemePrimary(),
-          iconData: Icons.sort_rounded,
-          backGroundColor: setThemeBackground(),
-        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionBubble(
+        items: <Bubble>[
+          Bubble(
+            title: "By Id",
+            iconColor: setThemePrimary(),
+            bubbleColor: setThemeBackground(),
+            icon: Icons.settings,
+            titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
+            onPress: () {
+              _animationController.reverse();
+            },
+          ),
+          Bubble(
+            title: "By Type",
+            iconColor: setThemePrimary(),
+            bubbleColor: setThemeBackground(),
+            icon: Icons.people,
+            titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
+            onPress: () {
+              _animationController.reverse();
+            },
+          ),
+        ],
+        animation: _animation,
+        onPress: () => _animationController.isCompleted
+            ? _animationController.reverse()
+            : _animationController.forward(),
+        iconColor: setThemePrimary(),
+        iconData: Icons.sort_rounded,
+        backGroundColor: setThemeBackground(),
       ),
     );
   }
