@@ -14,16 +14,16 @@ import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class MainPokemonList extends StatefulWidget {
-  const MainPokemonList({
+class MainAppPage extends StatefulWidget {
+  const MainAppPage({
     super.key,
   });
 
   @override
-  State<MainPokemonList> createState() => _MainPokemonListState();
+  State<MainAppPage> createState() => _MainAppPageState();
 }
 
-class _MainPokemonListState extends State<MainPokemonList>
+class _MainAppPageState extends State<MainAppPage>
     with TickerProviderStateMixin {
   //! Flags
   bool isFirstBuild = true;
@@ -301,7 +301,7 @@ class _MainPokemonListState extends State<MainPokemonList>
             ? _animationController.reverse()
             : _animationController.forward(),
         iconColor: setThemePrimary(),
-        iconData: Icons.sort_rounded,
+        iconData: Icons.view_carousel_rounded,
         backGroundColor: setThemeBackground(),
       ),
     );

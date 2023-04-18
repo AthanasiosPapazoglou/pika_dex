@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pika_dex/models/pokemon.dart';
-import 'package:pika_dex/pages/pokemon_list_page.dart';
+import 'package:pika_dex/pages/main_app_page.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 
 void main() {
@@ -29,7 +29,7 @@ class _PikaDexState extends State<PikaDex> {
       title: 'Flutter Demo',
       theme: AppThemes.darkTheme,
       darkTheme: AppThemes.lightTheme,
-      home: Scaffold(body: MainPokemonList()),
+      home: Scaffold(body: MainAppPage()),
     );
   }
 }

@@ -34,69 +34,78 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
       onTap: () {
         Navigator.pop(context);
       },
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.6,
-        width: double.maxFinite,
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 2.5,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 1,
+      child: Column(
+        children: [
+          Icon(
+            Icons.drag_handle_rounded,
+            size: 42,
           ),
-          itemCount: 18,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                widget.filterListCallback(index);
-                widget.modalSheetLogicCoordinator();
-                setState(() {
-                  activeTypeFilters[index] = !activeTypeFilters[index];
-                });
-                // filterModalSheetLogicCoordinator();
-              },
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 6, 16, 6),
-                child: Container(
-                  color: activeTypeFilters[index]
-                      ? pokemonTypeColors[index]
-                      : Colors.grey.shade400,
-                  height: 48,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: activeTypeFilters[index]
-                                ? Colors.green
-                                : Colors.red,
-                          ),
-                          child: Center(
-                            child: Icon(
-                              activeTypeFilters[index]
-                                  ? Icons.check_rounded
-                                  : Icons.cancel_outlined,
+          Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: double.maxFinite,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 2.5,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 1,
+              ),
+              itemCount: 18,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () {
+                    widget.filterListCallback(index);
+                    widget.modalSheetLogicCoordinator();
+                    setState(() {
+                      activeTypeFilters[index] = !activeTypeFilters[index];
+                    });
+                  },
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 6, 16, 6),
+                    child: Container(
+                      color: activeTypeFilters[index]
+                          ? pokemonTypeColors[index]
+                          : Colors.grey.shade400,
+                      height: 48,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: activeTypeFilters[index]
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  activeTypeFilters[index]
+                                      ? Icons.check_rounded
+                                      : Icons.cancel_outlined,
+                                ),
+                              ),
+                              height: 32,
+                              width: 32,
                             ),
                           ),
-                          height: 32,
-                          width: 32,
-                        ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 8),
+                            child: Image.asset(
+                              'assets/type_badges/${pokemonTypes[index]}.png',
+                              scale: 1.1,
+                            ),
+                          )
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Image.asset(
-                            'assets/type_badges/${pokemonTypes[index]}.png', scale: 1.1,),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
