@@ -6,38 +6,27 @@ class TypeFilteringModal extends StatefulWidget {
   const TypeFilteringModal({
     required this.filterListCallback,
     required this.modalSheetLogicCoordinator,
+    required this.copyOfFilterList,
     Key? key,
   }) : super(key: key);
 
   final Function filterListCallback;
   final Function modalSheetLogicCoordinator;
+  final List<bool> copyOfFilterList;
 
   @override
   State<TypeFilteringModal> createState() => _TypeFilteringModalState();
 }
 
 class _TypeFilteringModalState extends State<TypeFilteringModal> {
+  
+  List<bool> activeTypeFilters = [];
 
-  List<bool> activeTypeFilters = [
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-  ];
+  @override
+  void initState() {
+    super.initState();
+    activeTypeFilters = List.from(widget.copyOfFilterList);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +46,7 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
                 widget.filterListCallback(index);
                 widget.modalSheetLogicCoordinator();
                 setState(() {
-                  activeTypeFilters[index] =
-                      !activeTypeFilters[index];
+                  activeTypeFilters[index] = !activeTypeFilters[index];
                 });
                 // filterModalSheetLogicCoordinator();
               },
@@ -77,20 +65,15 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color:
-                                activeTypeFilters[
-                                        index]
-                                    ? Colors.green
-                                    :
-                                Colors.red,
+                            color: activeTypeFilters[index]
+                                ? Colors.green
+                                : Colors.red,
                           ),
                           child: Center(
                             child: Icon(
                               activeTypeFilters[index]
-                                  ? Icons
-                                      .check_rounded
-                                  :
-                              Icons.cancel_outlined,
+                                  ? Icons.check_rounded
+                                  : Icons.cancel_outlined,
                             ),
                           ),
                           height: 32,

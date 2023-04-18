@@ -64,9 +64,21 @@ class _MainPokemonListState extends State<MainPokemonList>
   late AnimationController _animationController;
 
   //! Callbacks
-  changeFilterListCallback(int indexNum) {
+  void changeFilterListCallback(int indexNum) {
     setState(() {
       activeTypeFilters[indexNum] = !activeTypeFilters[indexNum];
+    });
+  }
+
+  void filterModalSheetLogicCoordinator() {
+    setState(() {
+      resetFilteredList();
+      for (int i = 0; i < 18; i++) {
+        if (!activeTypeFilters[i]) {
+          filteredPokemonList.removeWhere(
+              (element) => (element.type ?? []).contains(pokemonTypes[i]));
+        }
+      }
     });
   }
 
@@ -129,17 +141,7 @@ class _MainPokemonListState extends State<MainPokemonList>
     });
   }
 
-  void filterModalSheetLogicCoordinator() {
-    setState(() {
-      resetFilteredList();
-      for (int i = 0; i < 18; i++) {
-        if (!activeTypeFilters[i]) {
-          filteredPokemonList.removeWhere(
-              (element) => (element.type ?? []).contains(pokemonTypes[i]));
-        }
-      }
-    });
-  }
+  
 
   //! Init/Dispose
   @override
@@ -202,6 +204,7 @@ class _MainPokemonListState extends State<MainPokemonList>
                               return TypeFilteringModal(
                                 filterListCallback: changeFilterListCallback,
                                 modalSheetLogicCoordinator: filterModalSheetLogicCoordinator,
+                                copyOfFilterList: List.from(activeTypeFilters),
                               );
                               // return GestureDetector(
                               //   behavior: HitTestBehavior.opaque,
