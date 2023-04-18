@@ -72,9 +72,9 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return DismissingWrapper(
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
             children: [
               Container(
                 width: double.maxFinite,
@@ -116,12 +116,11 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                         widget.modelisedPokemon.type?[0] ?? '')]),
                 child: Hero(
                   tag: widget.modelisedPokemon.id ?? 0,
-                  child: Image.asset('assets/app_icon.jpeg'),
-                  // Image.asset(
-                  //   widget.imagePath,
-                  //   height: 250,
-                  //   width: 250,
-                  // ),
+                  child: Image.asset(
+                    widget.imagePath,
+                    height: 250,
+                    width: 250,
+                  ),
                 ),
               ),
               pokemonTypeBadgetsRow(context),

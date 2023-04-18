@@ -38,12 +38,11 @@ class PokemonListCard extends StatelessWidget {
               Hero(
                 tag: modelisedPokemon.id ?? 0,
                 child: 
-                Image.asset('assets/app_icon.jpeg')
-                // Image.asset(
-                //   'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
-                //   height: 64,
-                //   width: 64,
-                // ),
+                Image.asset(
+                  'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
+                  height: 64,
+                  width: 64,
+                ),
               ),
               Text(
                 modelisedPokemon.name?.english ?? '',
