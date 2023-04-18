@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -9,9 +10,7 @@ import 'package:pika_dex/utils/dismiss_swipe.dart';
 
 class PokemonDetailsPage extends StatefulWidget {
   const PokemonDetailsPage(
-      {super.key,
-      required this.imagePath,
-      required this.modelisedPokemon});
+      {super.key, required this.imagePath, required this.modelisedPokemon});
 
   final String imagePath;
   final Pokemon modelisedPokemon;
@@ -20,8 +19,13 @@ class PokemonDetailsPage extends StatefulWidget {
   State<PokemonDetailsPage> createState() => _PokemonDetailsPageState();
 }
 
-class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
+class _PokemonDetailsPageState extends State<PokemonDetailsPage>
+    with SingleTickerProviderStateMixin {
   TextStyle graphStyle = TextStyle(fontSize: 20);
+  TextStyle tabStyle =
+      TextStyle(fontSize: 16, color: AppThemes.darkTheme.primaryColor);
+
+  late TabController tabController;
 
   List<String> quadrupleDamage = [];
   List<String> doubleDamage = [];
@@ -35,16 +39,16 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
 
   void getPokemonTypes() {
     for (int i = 0; i < (widget.modelisedPokemon.type?.length ?? 1); i++) {
-      pokemonTypeIndexes
-          .add(parsePokemonTypeTextToIndex(widget.modelisedPokemon.type?[i] ?? ''));
+      pokemonTypeIndexes.add(
+          parsePokemonTypeTextToIndex(widget.modelisedPokemon.type?[i] ?? ''));
       pokemonTypeTexts.add(widget.modelisedPokemon.type?[i] ?? '');
     }
   }
 
   void populatePokemonDamageLists() {
     for (int i = 0; i < 18; i++) {
-      double value = damageMultiplierCalculator(
-          i, pokemonTypeIndexes, checkIfPokemonIsLevitating(widget.modelisedPokemon.id ?? 0));
+      double value = damageMultiplierCalculator(i, pokemonTypeIndexes,
+          checkIfPokemonIsLevitating(widget.modelisedPokemon.id ?? 0));
 
       if (value == 4.0) {
         quadrupleDamage.add(pokemonTypes[i]);
@@ -67,6 +71,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
     super.initState();
     getPokemonTypes();
     populatePokemonDamageLists();
+    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -86,7 +91,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child:  Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(left: 16),
                         child: Icon(
                           Icons.arrow_back_ios_new_rounded,
@@ -97,7 +102,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                     ),
                     Text(
                       widget.modelisedPokemon.name?.english ?? '',
-                      style:  TextStyle(
+                      style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: AppThemes.darkTheme.primaryColor,
@@ -124,35 +129,91 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                 ),
               ),
               pokemonTypeBadgetsRow(context),
-              Expanded(
-                child: Container(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                       Text(
-                        'Damage Taken:',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppThemes.darkTheme.primaryColor,
-                        ),
+              TabBar(
+                  indicatorColor: AppThemes.darkTheme.primaryColor,
+                  controller: tabController,
+                  tabs: [
+                    Tab(
+                      child: Text(
+                        'Damage Taken',
+                        style: tabStyle,
                       ),
-                      greyAreaTypesPlacement(
-                          'x4', Colors.blue, quadrupleDamage, context),
-                      greyAreaTypesPlacement(
-                          'x2', Colors.green, doubleDamage, context),
-                      greyAreaTypesPlacement(
-                          'x1', Colors.yellow, normalDamage, context),
-                      greyAreaTypesPlacement(
-                          'x0.5', Colors.orange, halfDamage, context),
-                      greyAreaTypesPlacement(
-                          'x0.25', Colors.red, quarterDamage, context),
-                      greyAreaTypesPlacement(
-                          'x0', Colors.grey.shade600, immune, context),
-                    ],
-                  ),
+                    ),
+                    Tab(
+                      child: Text(
+                        'Statistics',
+                        style: tabStyle,
+                      ),
+                    ),
+                  ]),
+              SizedBox(
+                height: 3,
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          greyAreaTypesPlacement(
+                              'x4', Colors.blue, quadrupleDamage, context),
+                          greyAreaTypesPlacement(
+                              'x2', Colors.green, doubleDamage, context),
+                          greyAreaTypesPlacement(
+                              'x1', Colors.yellow, normalDamage, context),
+                          greyAreaTypesPlacement(
+                              'x0.5', Colors.orange, halfDamage, context),
+                          greyAreaTypesPlacement(
+                              'x0.25', Colors.red, quarterDamage, context),
+                          greyAreaTypesPlacement(
+                              'x0', Colors.grey.shade600, immune, context),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          testMethod(
+                              context,
+                              'HP',
+                              (widget.modelisedPokemon.base?.hP ?? 0.0)
+                                  .toDouble()),
+                          testMethod(
+                              context,
+                              'Attack',
+                              (widget.modelisedPokemon.base?.attack ?? 0.0)
+                                  .toDouble()),
+                          testMethod(
+                              context,
+                              'Defense',
+                              (widget.modelisedPokemon.base?.defense ?? 0.0)
+                                  .toDouble()),
+                          testMethod(
+                              context,
+                              'Sp. Attack',
+                              (widget.modelisedPokemon.base?.spAttack ?? 0.0)
+                                  .toDouble()),
+                          testMethod(
+                              context,
+                              'Sp. Defense',
+                              (widget.modelisedPokemon.base?.spDefense ?? 0.0)
+                                  .toDouble()),
+                          testMethod(
+                              context,
+                              'Speed',
+                              (widget.modelisedPokemon.base?.speed ?? 0.0)
+                                  .toDouble()),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -225,7 +286,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
       child: Center(
         child: Column(
           children: [
-             Text(
+            Text(
               'Types:',
               style: TextStyle(
                 fontSize: 18,
@@ -240,6 +301,33 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   (index) => Image.asset(
                       'assets/type_badges/${pokemonTypeTexts[index]}.png')),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget testMethod(BuildContext context, String text, double value) {
+    return Flexible(
+      child: Container(
+        height: double.maxFinite,
+        width: double.maxFinite,
+        child: Row(
+          children: [
+            Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Container(
+                  child: Text(text),
+                  width: 120,
+                )),
+            Container(
+              height: 24,
+              width: MediaQuery.of(context).size.width - 152,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+            )
           ],
         ),
       ),
