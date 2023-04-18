@@ -19,7 +19,6 @@ class TypeFilteringModal extends StatefulWidget {
 }
 
 class _TypeFilteringModalState extends State<TypeFilteringModal> {
-  
   List<bool> activeTypeFilters = [];
 
   @override
@@ -38,7 +37,13 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.6,
         width: double.maxFinite,
-        child: ListView.builder(
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 2.5,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 1,
+          ),
           itemCount: 18,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
@@ -83,7 +88,7 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
                       Padding(
                         padding: EdgeInsets.only(right: 8),
                         child: Image.asset(
-                            'assets/type_badges/${pokemonTypes[index]}.png'),
+                            'assets/type_badges/${pokemonTypes[index]}.png', scale: 1.1,),
                       )
                     ],
                   ),
