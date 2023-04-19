@@ -66,6 +66,16 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
     }
   }
 
+  int appropriateColorIndex(double value, int max) {
+    if (value / max * 4 < 1) {
+      return 0;
+    } else if (value / max * 4 > 3) {
+      return 4;
+    } else {
+      return ((value / max) * 4).floor();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,6 +141,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
               pokemonTypeBadgetsRow(context),
               TabBar(
                   indicatorColor: AppThemes.darkTheme.primaryColor,
+                  unselectedLabelColor: Colors.white,
                   controller: tabController,
                   tabs: [
                     Tab(
@@ -159,16 +170,16 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          greyAreaTypesPlacement(
-                              'x4', Colors.blue, quadrupleDamage, context),
-                          greyAreaTypesPlacement(
-                              'x2', Colors.green, doubleDamage, context),
-                          greyAreaTypesPlacement(
-                              'x1', Colors.yellow, normalDamage, context),
-                          greyAreaTypesPlacement(
-                              'x0.5', Colors.orange, halfDamage, context),
-                          greyAreaTypesPlacement(
-                              'x0.25', Colors.red, quarterDamage, context),
+                          greyAreaTypesPlacement('x4', scalableColorPalet[4],
+                              quadrupleDamage, context),
+                          greyAreaTypesPlacement('x2', scalableColorPalet[3],
+                              doubleDamage, context),
+                          greyAreaTypesPlacement('x1', scalableColorPalet[2],
+                              normalDamage, context),
+                          greyAreaTypesPlacement('x0.5', scalableColorPalet[1],
+                              halfDamage, context),
+                          greyAreaTypesPlacement('x0.25', scalableColorPalet[0],
+                              quarterDamage, context),
                           greyAreaTypesPlacement(
                               'x0', Colors.grey.shade600, immune, context),
                         ],
@@ -180,36 +191,42 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          testMethod(
+                          pokemonStatRow(
                               context,
                               'HP',
                               (widget.modelisedPokemon.base?.hP ?? 0.0)
-                                  .toDouble()),
-                          testMethod(
+                                  .toDouble(),
+                              maxValuesPerStatistic[0]),
+                          pokemonStatRow(
                               context,
                               'Attack',
                               (widget.modelisedPokemon.base?.attack ?? 0.0)
-                                  .toDouble()),
-                          testMethod(
+                                  .toDouble(),
+                              maxValuesPerStatistic[1]),
+                          pokemonStatRow(
                               context,
                               'Defense',
                               (widget.modelisedPokemon.base?.defense ?? 0.0)
-                                  .toDouble()),
-                          testMethod(
+                                  .toDouble(),
+                              maxValuesPerStatistic[2]),
+                          pokemonStatRow(
                               context,
                               'Sp. Attack',
                               (widget.modelisedPokemon.base?.spAttack ?? 0.0)
-                                  .toDouble()),
-                          testMethod(
+                                  .toDouble(),
+                              maxValuesPerStatistic[3]),
+                          pokemonStatRow(
                               context,
                               'Sp. Defense',
                               (widget.modelisedPokemon.base?.spDefense ?? 0.0)
-                                  .toDouble()),
-                          testMethod(
+                                  .toDouble(),
+                              maxValuesPerStatistic[4]),
+                          pokemonStatRow(
                               context,
                               'Speed',
                               (widget.modelisedPokemon.base?.speed ?? 0.0)
-                                  .toDouble()),
+                                  .toDouble(),
+                              maxValuesPerStatistic[5]),
                         ],
                       ),
                     ),
@@ -307,7 +324,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
     );
   }
 
-  Widget testMethod(BuildContext context, String text, double value) {
+  Widget pokemonStatRow(
+      BuildContext context, String text, double value, int max) {
     return Flexible(
       child: Container(
         height: double.maxFinite,
@@ -315,18 +333,49 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
         child: Row(
           children: [
             Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: Container(
-                  child: Text(text),
-                  width: 120,
-                )),
-            Container(
-              height: 24,
-              width: MediaQuery.of(context).size.width - 152,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
+              padding: EdgeInsets.only(left: 16),
+              child: Container(
+                child: Text(
+                  text,
+                  style: tabStyle,
+                ),
+                width: 120,
               ),
+            ),
+            Stack(
+              children: [
+                Container(
+                  height: 24,
+                  width: MediaQuery.of(context).size.width - 152,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  height: 24,
+                  width:
+                      (MediaQuery.of(context).size.width - 152) * (value / max),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color:
+                        scalableColorPalet[appropriateColorIndex(value, max)],
+                  ),
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${value.toInt()}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),

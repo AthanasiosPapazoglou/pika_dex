@@ -8,6 +8,26 @@ Map<String, List<double>> offenseBoard = {"": []};
 /// Defence Board Map
 Map<String, List<double>> defenseBoard = {"": []};
 
+/// Max value per statistic 
+List<int> maxValuesPerStatistic = [
+  255, //HP
+  181, //ATTACK
+  230, //DEF
+  180, //SP ATT
+  230, //SP.DEF
+  200, //SPEED
+];
+
+/// Statistic colors 
+List<MaterialColor> scalableColorPalet = [
+  Colors.red,
+  Colors.orange,
+  Colors.yellow,
+  Colors.green,
+  Colors.blue
+
+];
+
 /// Pokemon Type Colors for Pokemon List Card background coloring
 List<Color> pokemonTypeColors = [
    Color(0xFFA8A77A),
