@@ -353,15 +353,15 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                   ),
                 ),
                 Container(
-                  height: 24,
-                  width:
-                      (MediaQuery.of(context).size.width - 152) * (value / max),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color:
-                        scalableColorPalet[appropriateColorIndex(value, max)],
-                  ),
-                ),
+                      height: 24,
+                      width: (MediaQuery.of(context).size.width - 152) *
+                          (value / max),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: scalableColorPalet[
+                            appropriateColorIndex(value, max)],
+                      ),
+                    ),
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,
