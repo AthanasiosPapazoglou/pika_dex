@@ -23,7 +23,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
     with SingleTickerProviderStateMixin {
   TextStyle graphStyle = TextStyle(fontSize: 20);
   TextStyle tabStyle =
-      TextStyle(fontSize: 16, color: AppThemes.darkTheme.primaryColor);
+      TextStyle(fontSize: 18, color: AppThemes.darkTheme.primaryColor, fontWeight: FontWeight.bold);
+  TextStyle statTitleStyle = TextStyle(fontSize: 18, color: AppThemes.darkTheme.primaryColor,);
 
   late TabController tabController;
 
@@ -142,6 +143,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
               TabBar(
                   indicatorColor: AppThemes.darkTheme.primaryColor,
                   unselectedLabelColor: Colors.white,
+                  labelColor: Colors.white,
                   controller: tabController,
                   tabs: [
                     Tab(
@@ -337,7 +339,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
               child: Container(
                 child: Text(
                   text,
-                  style: tabStyle,
+                  style: statTitleStyle,
                 ),
                 width: 120,
               ),
@@ -345,7 +347,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
             Stack(
               children: [
                 Container(
-                  height: 24,
+                  height: 30,
                   width: MediaQuery.of(context).size.width - 152,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -353,7 +355,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                   ),
                 ),
                 Container(
-                      height: 24,
+                      height: 30,
                       width: (MediaQuery.of(context).size.width - 152) *
                           (value / max),
                       decoration: BoxDecoration(
