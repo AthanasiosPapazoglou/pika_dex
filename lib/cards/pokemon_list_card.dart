@@ -59,30 +59,36 @@ class PokemonListCard extends StatelessWidget {
       viewType == PokemonListViewType.triple);
 
   multiplePokemonViewCard() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Hero(
           tag: modelisedPokemon.id ?? 0,
           child: Image.asset(
             'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
-            height: 64,
-            width: 64,
+            height: viewType == PokemonListViewType.double ? 125 : 60,
+            width: viewType == PokemonListViewType.double ? 125 : 60,
           ),
         ),
-        Text(
-          modelisedPokemon.name?.english ?? '',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          '${(modelisedPokemon.id ?? 0)}',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+        Column(
+          children: [
+            FittedBox(
+              child: Text(
+                modelisedPokemon.name?.english ?? '',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Text(
+              '${(modelisedPokemon.id ?? 0)}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
         )
       ],
     );
