@@ -357,7 +357,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                 Container(
                   width: MediaQuery.of(context).size.width - 152,
                   child: FAProgressBar(
-                    animatedDuration: Duration(milliseconds: 1500),
+                    animatedDuration: Duration(milliseconds: 700),
                     currentValue: value,
                     maxValue: max.toDouble(),
                     // displayText: '',

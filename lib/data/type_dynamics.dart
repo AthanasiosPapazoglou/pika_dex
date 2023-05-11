@@ -145,5 +145,6 @@ bool checkIfPokemonIsLevitating(int pokemonId) {
    return levitatingPokemons.contains(pokemonId);
 }
 
+enum PokemonListViewType {single, double, triple}
 
 

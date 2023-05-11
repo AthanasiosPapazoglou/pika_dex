@@ -25,6 +25,10 @@ class MainAppPage extends StatefulWidget {
 
 class _MainAppPageState extends State<MainAppPage>
     with TickerProviderStateMixin {
+
+  //! List View
+  PokemonListViewType selectedViewType = PokemonListViewType.single;
+
   //! Flags
   bool isFirstBuild = true;
   int textFieldInputLength = 0;
@@ -168,6 +172,7 @@ class _MainAppPageState extends State<MainAppPage>
 
   @override
   Widget build(BuildContext context) {
+    print('rebuild happened, variable value: $selectedViewType');
     firstBuildDataInitilizer();
     return Scaffold(
       body: SafeArea(
@@ -233,7 +238,23 @@ class _MainAppPageState extends State<MainAppPage>
                 labelTextBuilder: (double offset) => Text("${offset ~/ 100}"),
                 controller: _scrollbarController,
                 backgroundColor: AppThemes.darkTheme.primaryColor,
-                child: ListView.builder(
+                child: (selectedViewType == PokemonListViewType.double || selectedViewType == PokemonListViewType.triple)
+                ? GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: (selectedViewType == PokemonListViewType.double) ? 2 : 3,
+                    crossAxisSpacing: 0.0,
+                    mainAxisSpacing: 0.0,
+                  ),
+                  controller: _scrollbarController,
+                  itemCount: filteredPokemonList.length,
+                  itemBuilder: (context, index) {
+                    return PokemonListCard(
+                      modelisedPokemon: filteredPokemonList[index],
+                      viewType: selectedViewType,
+                    );
+                  },
+                )
+                : ListView.builder(
                   controller: _scrollbarController,
                   itemCount: filteredPokemonList.length,
                   itemBuilder: (context, index) {
@@ -253,10 +274,11 @@ class _MainAppPageState extends State<MainAppPage>
                       ),
                       child: PokemonListCard(
                         modelisedPokemon: filteredPokemonList[index],
+                        viewType: selectedViewType,
                       ),
                     );
                   },
-                ),
+                )
               ),
             ),
           ],
@@ -266,38 +288,48 @@ class _MainAppPageState extends State<MainAppPage>
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
           Bubble(
-            title: "Pokemons",
+            title: "Single",
             iconColor: setThemePrimary(),
             bubbleColor: setThemeBackground(),
-            icon: Icons.pets_rounded,
+            icon: Icons.list_rounded,
             titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
             onPress: () {
+              setState(() {
+                selectedViewType = PokemonListViewType.single;
+              });
               _animationController.reverse();
             },
           ),
           Bubble(
-            title: "Favorites",
+            title: "Double",
             iconColor: setThemePrimary(),
             bubbleColor: setThemeBackground(),
-            icon: Icons.favorite_rounded,
+            icon: Icons.grid_view,
             titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
             onPress: () {
+              setState(() {
+                selectedViewType = PokemonListViewType.double;
+              });
               _animationController.reverse();
             },
           ),
           Bubble(
-            title: "Trainers",
+            title: "Triple",
             iconColor: setThemePrimary(),
             bubbleColor: setThemeBackground(),
-            icon: Icons.people,
+            icon: Icons.grid_on_outlined,
             titleStyle: TextStyle(fontSize: 16, color: setThemePrimary()),
             onPress: () {
+              setState(() {
+                selectedViewType = PokemonListViewType.triple;
+              });
               _animationController.reverse();
             },
           ),
         ],
         animation: _animation,
-        onPress: () => _animationController.isCompleted
+        onPress: () => 
+        _animationController.isCompleted
             ? _animationController.reverse()
             : _animationController.forward(),
         iconColor: setThemePrimary(),

@@ -61,7 +61,7 @@ class _TypeFilteringModalState extends State<TypeFilteringModal> {
                     });
                   },
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 6, 16, 6),
+                    padding: EdgeInsetsDirectional.all(8),
                     child: Container(
                       color: activeTypeFilters[index]
                           ? pokemonTypeColors[index]
