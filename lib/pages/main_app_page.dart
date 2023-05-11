@@ -172,7 +172,6 @@ class _MainAppPageState extends State<MainAppPage>
 
   @override
   Widget build(BuildContext context) {
-    print('rebuild happened, variable value: $selectedViewType');
     firstBuildDataInitilizer();
     return Scaffold(
       body: SafeArea(
@@ -235,7 +234,6 @@ class _MainAppPageState extends State<MainAppPage>
             Expanded(
               child: DraggableScrollbar.arrows(
                 alwaysVisibleScrollThumb: true,
-                labelTextBuilder: (double offset) => Text("${offset ~/ 100}"),
                 controller: _scrollbarController,
                 backgroundColor: AppThemes.darkTheme.primaryColor,
                 child: (selectedViewType == PokemonListViewType.double || selectedViewType == PokemonListViewType.triple)
