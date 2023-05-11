@@ -2,11 +2,13 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_colors.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:pika_dex/utils/dismiss_swipe.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
 class PokemonDetailsPage extends StatefulWidget {
   const PokemonDetailsPage(
@@ -22,9 +24,14 @@ class PokemonDetailsPage extends StatefulWidget {
 class _PokemonDetailsPageState extends State<PokemonDetailsPage>
     with SingleTickerProviderStateMixin {
   TextStyle graphStyle = TextStyle(fontSize: 20);
-  TextStyle tabStyle =
-      TextStyle(fontSize: 18, color: AppThemes.darkTheme.primaryColor, fontWeight: FontWeight.bold);
-  TextStyle statTitleStyle = TextStyle(fontSize: 18, color: AppThemes.darkTheme.primaryColor,);
+  TextStyle tabStyle = TextStyle(
+      fontSize: 18,
+      color: AppThemes.darkTheme.primaryColor,
+      fontWeight: FontWeight.bold);
+  TextStyle statTitleStyle = TextStyle(
+    fontSize: 18,
+    color: AppThemes.darkTheme.primaryColor,
+  );
 
   late TabController tabController;
 
@@ -193,6 +200,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+
                           pokemonStatRow(
                               context,
                               'HP',
@@ -330,8 +338,8 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
       BuildContext context, String text, double value, int max) {
     return Flexible(
       child: Container(
-        height: double.maxFinite,
         width: double.maxFinite,
+        height: double.maxFinite,
         child: Row(
           children: [
             Padding(
@@ -347,38 +355,37 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
             Stack(
               children: [
                 Container(
-                  height: 30,
                   width: MediaQuery.of(context).size.width - 152,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                  child: FAProgressBar(
+                    animatedDuration: Duration(milliseconds: 1500),
+                    currentValue: value,
+                    maxValue: max.toDouble(),
+                    // displayText: '',
+                    displayTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+
+                    progressColor:
+                        scalableColorPalet[appropriateColorIndex(value, max)],
+                    backgroundColor: Colors.white,
                   ),
                 ),
-                Container(
-                      height: 30,
-                      width: (MediaQuery.of(context).size.width - 152) *
-                          (value / max),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: scalableColorPalet[
-                            appropriateColorIndex(value, max)],
-                      ),
-                    ),
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      '${value.toInt()}',
+                      '${value.toInt()} / $max',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
