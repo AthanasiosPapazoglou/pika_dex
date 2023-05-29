@@ -19,12 +19,16 @@ class PokemonListCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PokemonDetailsPage(
-                      imagePath:
-                          'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
-                      modelisedPokemon: modelisedPokemon)));
+            context,
+            MaterialPageRoute(
+              builder: (context) => PokemonDetailsPage(
+                imagePath: ((modelisedPokemon.id ?? 0) < 810)
+                    ? 'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png'
+                    : 'assets/app_icon.jpeg',
+                modelisedPokemon: modelisedPokemon,
+              ),
+            ),
+          );
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -101,7 +105,9 @@ class PokemonListCard extends StatelessWidget {
         Hero(
           tag: modelisedPokemon.id ?? 0,
           child: Image.asset(
-            'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
+            ((modelisedPokemon.id ?? 0) < 810)
+                ? 'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png'
+                : 'assets/app_icon.jpeg',
             height: 64,
             width: 64,
           ),

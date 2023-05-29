@@ -98,7 +98,7 @@ class _MainAppPageState extends State<MainAppPage>
   }
 
   void populateModelisedList() {
-    for (int i = 0; i < 809; i++) {
+    for (int i = 0; i < 898; i++) {
       modelisedPokemonList.add(Pokemon.fromJson(decodedPokemonList[i]));
     }
   }
