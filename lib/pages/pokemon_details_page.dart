@@ -1,11 +1,6 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
 import 'package:pika_dex/models/pokemon.dart';
-import 'package:pika_dex/themes/app_colors.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:pika_dex/utils/dismiss_swipe.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
@@ -200,7 +195,6 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-
                           pokemonStatRow(
                               context,
                               'HP',

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
-import 'package:pika_dex/themes/app_themes.dart';
 
 class TypeFilteringModal extends StatefulWidget {
   const TypeFilteringModal({

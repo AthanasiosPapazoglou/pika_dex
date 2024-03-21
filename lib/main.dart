@@ -1,8 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/pages/main_app_page.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 
