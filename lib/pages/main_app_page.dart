@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pika_dex/cards/pokemon_list_card.dart';
 import 'package:pika_dex/components/common.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
@@ -25,7 +26,6 @@ class MainAppPage extends StatefulWidget {
 
 class _MainAppPageState extends State<MainAppPage>
     with TickerProviderStateMixin {
-
   //! List View
   PokemonListViewType selectedViewType = PokemonListViewType.single;
 
@@ -34,7 +34,7 @@ class _MainAppPageState extends State<MainAppPage>
   int textFieldInputLength = 0;
 
   //! Json Data
-  late var decodedPokemonList;
+  var decodedPokemonList;
 
   //! Modelised Lists
   List<Pokemon> modelisedPokemonList = [];
@@ -122,16 +122,18 @@ class _MainAppPageState extends State<MainAppPage>
     return double.tryParse(s) != null;
   }
 
-  void firstBuildDataInitilizer() {
-    if (isFirstBuild) {
-      setState(() {
-        populateModelisedList();
-        resetFilteredList();
-        isFirstBuild = false;
-      });
-    } else {
-      return;
-    }
+  void dataInitializer() async {
+    await getJsonFromFile().then((value) {
+      if (isFirstBuild) {
+        setState(() {
+          populateModelisedList();
+          resetFilteredList();
+          isFirstBuild = false;
+        });
+      } else {
+        return;
+      }
+    });
   }
 
   void textFieldInputLogicCoordinator() {
@@ -150,7 +152,7 @@ class _MainAppPageState extends State<MainAppPage>
   @override
   void initState() {
     super.initState();
-    getJsonFromFile();
+    dataInitializer();
     _scrollbarController = ScrollController();
     _textfieldController = TextEditingController();
 
@@ -172,7 +174,7 @@ class _MainAppPageState extends State<MainAppPage>
 
   @override
   Widget build(BuildContext context) {
-    firstBuildDataInitilizer();
+    // dataInitializer();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -232,52 +234,65 @@ class _MainAppPageState extends State<MainAppPage>
               ),
             ),
             Expanded(
-              child: DraggableScrollbar.arrows(
-                alwaysVisibleScrollThumb: true,
-                controller: _scrollbarController,
-                backgroundColor: AppThemes.darkTheme.primaryColor,
-                child: (selectedViewType == PokemonListViewType.double || selectedViewType == PokemonListViewType.triple)
-                ? GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: (selectedViewType == PokemonListViewType.double) ? 2 : 3,
-                    crossAxisSpacing: 0.0,
-                    mainAxisSpacing: 0.0,
-                  ),
-                  controller: _scrollbarController,
-                  itemCount: filteredPokemonList.length,
-                  itemBuilder: (context, index) {
-                    return PokemonListCard(
-                      modelisedPokemon: filteredPokemonList[index],
-                      viewType: selectedViewType,
-                    );
-                  },
-                )
-                : ListView.builder(
-                  controller: _scrollbarController,
-                  itemCount: filteredPokemonList.length,
-                  itemBuilder: (context, index) {
-                    return Slidable(
-                      endActionPane: ActionPane(
-                        motion: ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (_) {},
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.favorite_rounded,
-                            borderRadius: BorderRadius.circular(10),
-                            label: 'Set As Favorite',
-                          ),
-                        ],
+              child: (decodedPokemonList == null)
+                  ? Center(
+                      child: Container(
+                        color: Colors.yellow,
+                        width: 100,
+                        height: 100,
                       ),
-                      child: PokemonListCard(
-                        modelisedPokemon: filteredPokemonList[index],
-                        viewType: selectedViewType,
-                      ),
-                    );
-                  },
-                )
-              ),
+                    )
+                  : DraggableScrollbar.arrows(
+                      alwaysVisibleScrollThumb: true,
+                      controller: _scrollbarController,
+                      backgroundColor: AppThemes.darkTheme.primaryColor,
+                      child: (selectedViewType == PokemonListViewType.double ||
+                              selectedViewType == PokemonListViewType.triple)
+                          ? GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: (selectedViewType ==
+                                        PokemonListViewType.double)
+                                    ? 2
+                                    : 3,
+                                crossAxisSpacing: 0.0,
+                                mainAxisSpacing: 0.0,
+                              ),
+                              controller: _scrollbarController,
+                              itemCount: filteredPokemonList.length,
+                              itemBuilder: (context, index) {
+                                return PokemonListCard(
+                                  modelisedPokemon: filteredPokemonList[index],
+                                  viewType: selectedViewType,
+                                );
+                              },
+                            )
+                          : ListView.builder(
+                              controller: _scrollbarController,
+                              itemCount: filteredPokemonList.length,
+                              itemBuilder: (context, index) {
+                                return Slidable(
+                                  endActionPane: ActionPane(
+                                    motion: ScrollMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (_) {},
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.favorite_rounded,
+                                        borderRadius: BorderRadius.circular(10),
+                                        label: 'Set As Favorite',
+                                      ),
+                                    ],
+                                  ),
+                                  child: PokemonListCard(
+                                    modelisedPokemon:
+                                        filteredPokemonList[index],
+                                    viewType: selectedViewType,
+                                  ),
+                                );
+                              },
+                            )),
             ),
           ],
         ),
@@ -326,8 +341,7 @@ class _MainAppPageState extends State<MainAppPage>
           ),
         ],
         animation: _animation,
-        onPress: () => 
-        _animationController.isCompleted
+        onPress: () => _animationController.isCompleted
             ? _animationController.reverse()
             : _animationController.forward(),
         iconColor: setThemePrimary(),
