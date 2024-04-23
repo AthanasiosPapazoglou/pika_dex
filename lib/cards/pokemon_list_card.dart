@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/pages/pokemon_details_page.dart';
+import 'package:pika_dex/services.dart';
 
 class PokemonListCard extends StatelessWidget {
   const PokemonListCard(
@@ -17,7 +18,12 @@ class PokemonListCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          Map<String, dynamic> pokemonReturnObject =
+              await fetchPokemon(modelisedPokemon.name?.english ?? '');
+          for (int i = 0; i < pokemonReturnObject['moves'].length; i++) {
+            print('"${pokemonReturnObject['moves'][i]['move']['name']}" : ""');
+          }
           Navigator.push(
             context,
             MaterialPageRoute(
