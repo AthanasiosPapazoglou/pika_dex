@@ -1,5 +1,7 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
+import 'package:pika_dex/models/moves.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:pika_dex/utils/dismiss_swipe.dart';
@@ -7,10 +9,16 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 
 class PokemonDetailsPage extends StatefulWidget {
   const PokemonDetailsPage(
-      {super.key, required this.imagePath, required this.modelisedPokemon});
+      {super.key,
+      required this.imagePath,
+      required this.modelisedPokemon,
+      required this.formattedPokemonMovesList,
+      required this.allMoves});
 
   final String imagePath;
   final Pokemon modelisedPokemon;
+  final List<String> formattedPokemonMovesList;
+  final List<Move> allMoves;
 
   @override
   State<PokemonDetailsPage> createState() => _PokemonDetailsPageState();
@@ -84,7 +92,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
     super.initState();
     getPokemonTypes();
     populatePokemonDamageLists();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -160,6 +168,12 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                         style: tabStyle,
                       ),
                     ),
+                    Tab(
+                      child: Text(
+                        'Moves',
+                        style: tabStyle,
+                      ),
+                    )
                   ]),
               SizedBox(
                 height: 3,
@@ -234,6 +248,32 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                         ],
                       ),
                     ),
+                    ListView.builder(
+                        itemCount: widget.formattedPokemonMovesList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          //TODO PROGRESS
+                          print(
+                              'index where found: ${widget.allMoves.indexWhere((element) => element == widget.formattedPokemonMovesList[0])}');
+
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(widget.formattedPokemonMovesList[index]),
+                                // Text(widget
+                                //         .allMoves[widget.allMoves.indexWhere(
+                                //             (element) =>
+                                //                 element ==
+                                //                 widget.formattedPokemonMovesList[
+                                //                     index])]
+                                //         .type ??
+                                //     'null')
+                              ],
+                            ),
+                          );
+                        })
                   ],
                 ),
               ),

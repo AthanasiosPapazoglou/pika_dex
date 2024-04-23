@@ -9,6 +9,7 @@ import 'package:pika_dex/cards/pokemon_list_card.dart';
 import 'package:pika_dex/components/common.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
 import 'package:pika_dex/modals/type_filtering.dart';
+import 'package:pika_dex/models/moves.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/themes/app_themes.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
@@ -35,10 +36,12 @@ class _MainAppPageState extends State<MainAppPage>
 
   //! Json Data
   var decodedPokemonList;
+  var decodedMovesList;
 
   //! Modelised Lists
   List<Pokemon> modelisedPokemonList = [];
   List<Pokemon> filteredPokemonList = [];
+  List<Move> modelisedMovesList = [];
 
   //! Flag List
   List<bool> activeTypeFilters = [
@@ -88,18 +91,24 @@ class _MainAppPageState extends State<MainAppPage>
   }
 
   //! Functions
-  Future<String> getJsonFromFile() async {
-    final String response = await rootBundle.loadString('assets/pokedex.json');
-    final items = jsonDecode(response);
+  Future getJsonFromFile() async {
+    final String pokemons = await rootBundle.loadString('assets/pokedex.json');
+    final String moves = await rootBundle.loadString('assets/moves.json');
     setState(() {
-      decodedPokemonList = items;
+      decodedPokemonList = jsonDecode(pokemons);
+      decodedMovesList = jsonDecode(moves);
     });
-    return response;
   }
 
   void populateModelisedList() {
     for (int i = 0; i < 898; i++) {
       modelisedPokemonList.add(Pokemon.fromJson(decodedPokemonList[i]));
+    }
+  }
+
+  void populatedModelisedMovesList() {
+    for (int i = 0; i < 611; i++) {
+      modelisedMovesList.add(Move.fromJson(decodedMovesList[i]));
     }
   }
 
@@ -127,6 +136,7 @@ class _MainAppPageState extends State<MainAppPage>
       if (isFirstBuild) {
         setState(() {
           populateModelisedList();
+          populatedModelisedMovesList();
           resetFilteredList();
           isFirstBuild = false;
         });
@@ -264,6 +274,7 @@ class _MainAppPageState extends State<MainAppPage>
                                 return PokemonListCard(
                                   modelisedPokemon: filteredPokemonList[index],
                                   viewType: selectedViewType,
+                                  allMoves: modelisedMovesList,
                                 );
                               },
                             )
@@ -289,6 +300,7 @@ class _MainAppPageState extends State<MainAppPage>
                                     modelisedPokemon:
                                         filteredPokemonList[index],
                                     viewType: selectedViewType,
+                                    allMoves: modelisedMovesList,
                                   ),
                                 );
                               },

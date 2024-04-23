@@ -74,6 +74,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/pokedex.json
+    - assets/moves.json
     - assets/images/
     - assets/type_badges/
     - assets/app_icon.jpeg
