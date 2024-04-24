@@ -253,7 +253,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                         itemBuilder: (BuildContext context, int index) {
                           //TODO PROGRESS
                           print(
-                              'index where found: ${widget.allMoves.indexWhere((element) => element == widget.formattedPokemonMovesList[0])}');
+                              'index where found: ${widget.allMoves.indexWhere((element) => element.ename == widget.formattedPokemonMovesList[index])}');
 
                           return Padding(
                             padding:
@@ -262,14 +262,20 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(widget.formattedPokemonMovesList[index]),
-                                // Text(widget
-                                //         .allMoves[widget.allMoves.indexWhere(
-                                //             (element) =>
-                                //                 element ==
-                                //                 widget.formattedPokemonMovesList[
-                                //                     index])]
-                                //         .type ??
-                                //     'null')
+                                (widget.allMoves.indexWhere((element) =>
+                                            element.ename ==
+                                            widget.formattedPokemonMovesList[
+                                                index]) !=
+                                        -1)
+                                    ? Text(widget
+                                            .allMoves[widget.allMoves
+                                                .indexWhere((element) =>
+                                                    element.ename ==
+                                                    widget.formattedPokemonMovesList[
+                                                        index])]
+                                            .type ??
+                                        'null')
+                                    : Text('Unknown')
                               ],
                             ),
                           );
