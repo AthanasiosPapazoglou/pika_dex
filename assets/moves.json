@@ -6832,5 +6832,65 @@
     "pp": 5,
     "max_pp": 8,
     "type": "Water"
+},
+{
+    "accuracy": 100,
+    "category": "physical",
+    "cname": "",
+    "ename": "Trailblaze",
+    "id": 620,
+    "jname": "スチームバースト",
+    "power": 50,
+    "pp": 20,
+    "max_pp": 32,
+    "type": "Grass"
+},
+{
+    "accuracy": 100,
+    "category": "physical",
+    "cname": "",
+    "ename": "Double Edge",
+    "id": 621,
+    "jname": "スチームバースト",
+    "power": 120,
+    "pp": 15,
+    "max_pp": 24,
+    "type": "Normal"
+},
+{
+    "accuracy": 100,
+    "category": "physical",
+    "cname": "",
+    "ename": "Grassy Glide",
+    "id": 622,
+    "jname": "スチームバースト",
+    "power": 55,
+    "pp": 20,
+    "max_pp": 32,
+    "type": "Grass"
+},
+{
+    "accuracy": 100,
+    "category": "special",
+    "cname": "",
+    "ename": "Tera Blast",
+    "id": 623,
+    "jname": "スチームバースト",
+    "power": 80,
+    "pp": 10,
+    "max_pp": 16,
+    "type": "Normal"
+},
+{
+    "accuracy": 100,
+    "category": "special",
+    "cname": "",
+    "ename": "Mud Slap",
+    "id": 624,
+    "jname": "スチームバースト",
+    "power": 20,
+    "pp": 10,
+    "max_pp": 16,
+    "type": "Ground"
 }
 ]

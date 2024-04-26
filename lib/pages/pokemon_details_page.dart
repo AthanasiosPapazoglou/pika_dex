@@ -48,6 +48,13 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
   List<String> pokemonTypeTexts = [];
   List<int> pokemonTypeIndexes = [];
 
+  late List<Move> modelisedSpecificPokemonMoves;
+
+  bool isNameAscending = true;
+  bool isAccuracyAscending = false;
+  bool isDamageProfileAscending = false;
+  bool isMoveTypeAscending = true;
+
   void getPokemonTypes() {
     for (int i = 0; i < (widget.modelisedPokemon.type?.length ?? 1); i++) {
       pokemonTypeIndexes.add(
@@ -87,12 +94,62 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
     }
   }
 
+  isMoveInJson(int index) => (widget.allMoves.indexWhere((element) =>
+          element.ename == widget.formattedPokemonMovesList[index]) !=
+      -1);
+
+  sortByName(bool isAscending) {
+    int order = isAscending ? 1 : -1;
+    modelisedSpecificPokemonMoves
+        .sort((a, b) => a.ename!.compareTo(b.ename!) * order);
+  }
+
+  // sortByAccuracy(bool isAscending) {
+  //   int order = isAscending ? 1 : -1;
+  //   modelisedSpecificPokemonMoves
+  //       .sort((a, b) => a.accuracy!.compareTo(b.accuracy!) * order);
+  // }
+
+  // sortByDamageProfile(bool isAscending) {
+  //   int order = isAscending ? 1 : -1;
+  //   modelisedSpecificPokemonMoves
+  //       .sort((a, b) => a.ename!.compareTo(b.ename!) * order);
+  // }
+
+  sortByType(bool isAscending) {
+    int order = isAscending ? 1 : -1;
+    modelisedSpecificPokemonMoves
+        .sort((a, b) => a.type!.compareTo(b.type!) * order);
+  }
+
   @override
   void initState() {
     super.initState();
     getPokemonTypes();
     populatePokemonDamageLists();
     tabController = TabController(length: 3, vsync: this);
+    modelisedSpecificPokemonMoves = [];
+
+    for (int i = 0; i < widget.formattedPokemonMovesList.length; i++) {
+      if (isMoveInJson(i)) {
+        modelisedSpecificPokemonMoves.add(widget.allMoves[widget.allMoves
+            .indexWhere((element) =>
+                element.ename == widget.formattedPokemonMovesList[i])]);
+      } else {
+        modelisedSpecificPokemonMoves.add(Move(
+          accuracy: -1,
+          category: 'Unknown',
+          cname: 'Unknown',
+          ename: widget.formattedPokemonMovesList[i],
+          id: -1,
+          jname: 'Unknown',
+          power: -1,
+          pp: -1,
+          type: 'zUnknown',
+        ));
+      }
+    }
+    sortByType(true);
   }
 
   @override
@@ -159,18 +216,21 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                     Tab(
                       child: Text(
                         'Damage Taken',
+                        textAlign: TextAlign.center,
                         style: tabStyle,
                       ),
                     ),
                     Tab(
                       child: Text(
-                        'Statistics',
+                        'Base Stats',
+                        textAlign: TextAlign.center,
                         style: tabStyle,
                       ),
                     ),
                     Tab(
                       child: Text(
                         'Moves',
+                        textAlign: TextAlign.center,
                         style: tabStyle,
                       ),
                     )
@@ -248,38 +308,115 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                         ],
                       ),
                     ),
-                    ListView.builder(
-                        itemCount: widget.formattedPokemonMovesList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          //TODO PROGRESS
-                          print(
-                              'index where found: ${widget.allMoves.indexWhere((element) => element.ename == widget.formattedPokemonMovesList[index])}');
-
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
+                    Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 30,
+                            color: Theme.of(context).primaryColor,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(widget.formattedPokemonMovesList[index]),
-                                (widget.allMoves.indexWhere((element) =>
-                                            element.ename ==
-                                            widget.formattedPokemonMovesList[
-                                                index]) !=
-                                        -1)
-                                    ? Text(widget
-                                            .allMoves[widget.allMoves
-                                                .indexWhere((element) =>
-                                                    element.ename ==
-                                                    widget.formattedPokemonMovesList[
-                                                        index])]
-                                            .type ??
-                                        'null')
-                                    : Text('Unknown')
+                                InkWell(
+                                  onTap: () {
+                                    isNameAscending = !isNameAscending;
+                                    sortByName(isNameAscending);
+                                    setState(() {});
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Text('Move Name'),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    // isAccuracyAscending = !isAccuracyAscending;
+                                    // sortByAccuracy(isAccuracyAscending);
+                                    // setState(() {});
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Text('Accuracy %'),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    // isDamageProfileAscending =
+                                    //     !isDamageProfileAscending;
+                                    // sortByDamageProfile(
+                                    //     isDamageProfileAscending);
+                                    // setState(() {});
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Text('Type | Dmg'),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    isMoveTypeAscending = !isMoveTypeAscending;
+                                    sortByType(isMoveTypeAscending);
+                                    setState(() {});
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Text('Move Type'),
+                                  ),
+                                ),
                               ],
                             ),
-                          );
-                        })
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: modelisedSpecificPokemonMoves.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          child: Text(
+                                            modelisedSpecificPokemonMoves[index]
+                                                    .ename ??
+                                                'Unknown',
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${modelisedSpecificPokemonMoves[index].accuracy ?? ' - '}',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          '${modelisedSpecificPokemonMoves[index].category!.substring(0, 3).toUpperCase()} | ${modelisedSpecificPokemonMoves[index].power}',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        (modelisedSpecificPokemonMoves[index]
+                                                    .type ==
+                                                'zUnknown')
+                                            ? Text('Unknown')
+                                            : Image.asset(
+                                                'assets/type_badges/${modelisedSpecificPokemonMoves[index].type}.png',
+                                                width: 70,
+                                                height: 20,
+                                              )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
