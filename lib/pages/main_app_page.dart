@@ -15,6 +15,7 @@ import 'package:pika_dex/themes/app_themes.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class MainAppPage extends StatefulWidget {
   const MainAppPage({

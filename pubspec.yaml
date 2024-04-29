@@ -43,6 +43,7 @@ dependencies:
   flutter_animation_progress_bar: ^2.3.1
   flutter_spinkit: ^5.2.1
   http: ^1.2.0
+  connectivity_plus: ^6.0.3
 
 dev_dependencies:
   flutter_test:

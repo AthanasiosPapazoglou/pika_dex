@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pika_dex/data/type_dynamics.dart';
 import 'package:pika_dex/models/moves.dart';
 import 'package:pika_dex/models/pokemon.dart';
 import 'package:pika_dex/pages/pokemon_details_page.dart';
 import 'package:pika_dex/services.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 String formatMoveString(String input) {
   // Split the input string by '-' and capitalize each word
@@ -23,7 +25,7 @@ String formatMoveString(String input) {
   return pascalString;
 }
 
-class PokemonListCard extends StatelessWidget {
+class PokemonListCard extends StatefulWidget {
   PokemonListCard(
       {super.key,
       required this.modelisedPokemon,
@@ -34,7 +36,20 @@ class PokemonListCard extends StatelessWidget {
   final PokemonListViewType viewType;
   final List<Move> allMoves;
 
+  @override
+  State<PokemonListCard> createState() => _PokemonListCardState();
+}
+
+class _PokemonListCardState extends State<PokemonListCard> {
   List<String> formattedPokemonMovesList = [];
+  late bool isDownloadingData;
+  List<ConnectivityResult> currentConnectionState = [ConnectivityResult.none];
+
+  @override
+  void initState() {
+    isDownloadingData = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +57,72 @@ class PokemonListCard extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: InkWell(
         onTap: () async {
+          currentConnectionState = await Connectivity().checkConnectivity();
+          print('edw file: $currentConnectionState');
+          // if (currentConnectionState.length == 1 &&
+          //     currentConnectionState[0] == ConnectivityResult.none) {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => PokemonDetailsPage(
+          //           imagePath: ((widget.modelisedPokemon.id ?? 0) < 810)
+          //               ? 'assets/images/${imageNumberCorrector(widget.modelisedPokemon.id ?? 0)}${(widget.modelisedPokemon.id ?? 0)}.png'
+          //               : 'assets/app_icon.jpeg',
+          //           modelisedPokemon: widget.modelisedPokemon,
+          //           formattedPokemonMovesList: [],
+          //           allMoves: widget.allMoves),
+          //     ),
+          //   );
+          // } else {
+          //   setState(() {
+          //     isDownloadingData = true;
+          //   });
+          //   Map<String, dynamic> pokemonReturnObject = await fetchPokemon(
+          //       widget.modelisedPokemon.name?.english?.toLowerCase() ?? '');
+          //   for (int i = 0; i < pokemonReturnObject['moves'].length; i++) {
+          //     formattedPokemonMovesList.add(formatMoveString(
+          //         pokemonReturnObject['moves'][i]['move']['name']));
+          //   }
+          //   setState(() {
+          //     isDownloadingData = false;
+          //   });
+
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => PokemonDetailsPage(
+          //           imagePath: ((widget.modelisedPokemon.id ?? 0) < 810)
+          //               ? 'assets/images/${imageNumberCorrector(widget.modelisedPokemon.id ?? 0)}${(widget.modelisedPokemon.id ?? 0)}.png'
+          //               : 'assets/app_icon.jpeg',
+          //           modelisedPokemon: widget.modelisedPokemon,
+          //           formattedPokemonMovesList: formattedPokemonMovesList,
+          //           allMoves: widget.allMoves),
+          //     ),
+          //   );
+          // }
+          setState(() {
+            isDownloadingData = true;
+          });
           Map<String, dynamic> pokemonReturnObject = await fetchPokemon(
-              modelisedPokemon.name?.english?.toLowerCase() ?? '');
+              widget.modelisedPokemon.name?.english?.toLowerCase() ?? '');
           for (int i = 0; i < pokemonReturnObject['moves'].length; i++) {
             formattedPokemonMovesList.add(formatMoveString(
                 pokemonReturnObject['moves'][i]['move']['name']));
           }
+          setState(() {
+            isDownloadingData = false;
+          });
+
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PokemonDetailsPage(
-                  imagePath: ((modelisedPokemon.id ?? 0) < 810)
-                      ? 'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png'
+                  imagePath: ((widget.modelisedPokemon.id ?? 0) < 810)
+                      ? 'assets/images/${imageNumberCorrector(widget.modelisedPokemon.id ?? 0)}${(widget.modelisedPokemon.id ?? 0)}.png'
                       : 'assets/app_icon.jpeg',
-                  modelisedPokemon: modelisedPokemon,
+                  modelisedPokemon: widget.modelisedPokemon,
                   formattedPokemonMovesList: formattedPokemonMovesList,
-                  allMoves: allMoves),
+                  allMoves: widget.allMoves),
             ),
           );
         },
@@ -70,8 +135,8 @@ class PokemonListCard extends StatelessWidget {
               : singlePokemonViewCard(),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: pokemonTypeColors[
-                parsePokemonTypeTextToIndex(modelisedPokemon.type?[0] ?? '')],
+            color: pokemonTypeColors[parsePokemonTypeTextToIndex(
+                widget.modelisedPokemon.type?[0] ?? '')],
           ),
         ),
       ),
@@ -79,7 +144,6 @@ class PokemonListCard extends StatelessWidget {
   }
 
   //! Methods
-
   imageNumberCorrector(int pokemonId) {
     if (pokemonId < 10) {
       return '00';
@@ -90,26 +154,27 @@ class PokemonListCard extends StatelessWidget {
     }
   }
 
-  bool isMultiplePokemonViewType() => (viewType == PokemonListViewType.double ||
-      viewType == PokemonListViewType.triple);
+  bool isMultiplePokemonViewType() =>
+      (widget.viewType == PokemonListViewType.double ||
+          widget.viewType == PokemonListViewType.triple);
 
   multiplePokemonViewCard() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Hero(
-          tag: modelisedPokemon.id ?? 0,
+          tag: widget.modelisedPokemon.id ?? 0,
           child: Image.asset(
-            'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png',
-            height: viewType == PokemonListViewType.double ? 125 : 60,
-            width: viewType == PokemonListViewType.double ? 125 : 60,
+            'assets/images/${imageNumberCorrector(widget.modelisedPokemon.id ?? 0)}${(widget.modelisedPokemon.id ?? 0)}.png',
+            height: widget.viewType == PokemonListViewType.double ? 125 : 60,
+            width: widget.viewType == PokemonListViewType.double ? 125 : 60,
           ),
         ),
         Column(
           children: [
             FittedBox(
               child: Text(
-                modelisedPokemon.name?.english ?? '',
+                widget.modelisedPokemon.name?.english ?? '',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -117,7 +182,7 @@ class PokemonListCard extends StatelessWidget {
               ),
             ),
             Text(
-              '${(modelisedPokemon.id ?? 0)}',
+              '${(widget.modelisedPokemon.id ?? 0)}',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -130,34 +195,44 @@ class PokemonListCard extends StatelessWidget {
   }
 
   singlePokemonViewCard() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Hero(
-          tag: modelisedPokemon.id ?? 0,
-          child: Image.asset(
-            ((modelisedPokemon.id ?? 0) < 810)
-                ? 'assets/images/${imageNumberCorrector(modelisedPokemon.id ?? 0)}${(modelisedPokemon.id ?? 0)}.png'
-                : 'assets/app_icon.jpeg',
-            height: 64,
-            width: 64,
-          ),
-        ),
-        Text(
-          modelisedPokemon.name?.english ?? '',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          '${(modelisedPokemon.id ?? 0)}',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        )
-      ],
-    );
+    return isDownloadingData
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Fetching Data'),
+              SpinKitCircle(
+                color: Colors.white,
+              ),
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Hero(
+                tag: widget.modelisedPokemon.id ?? 0,
+                child: Image.asset(
+                  ((widget.modelisedPokemon.id ?? 0) < 810)
+                      ? 'assets/images/${imageNumberCorrector(widget.modelisedPokemon.id ?? 0)}${(widget.modelisedPokemon.id ?? 0)}.png'
+                      : 'assets/app_icon.jpeg',
+                  height: 64,
+                  width: 64,
+                ),
+              ),
+              Text(
+                widget.modelisedPokemon.name?.english ?? '',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${(widget.modelisedPokemon.id ?? 0)}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          );
   }
 }
