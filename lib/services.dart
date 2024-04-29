@@ -9,6 +9,7 @@ Future<Map<String, dynamic>> fetchPokemon(String pokemonName) async {
     Map<String, dynamic> data = json.decode(response.body);
     return data;
   } else {
-    throw Exception('Failed to fetch product data');
+    // throw Exception('Failed to fetch product data');
+    return {'Error': "No Data"};
   }
 }
