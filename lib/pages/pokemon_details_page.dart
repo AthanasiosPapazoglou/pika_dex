@@ -328,7 +328,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16.0),
-                                    child: Text('Move Name'),
+                                    child: Text('Name'),
                                   ),
                                 ),
                                 InkWell(
@@ -354,7 +354,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16.0),
-                                    child: Text('Type | Dmg'),
+                                    child: Text('Damage'),
                                   ),
                                 ),
                                 InkWell(
@@ -366,53 +366,67 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16.0),
-                                    child: Text('Move Type'),
+                                    child: Text('Type'),
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           Expanded(
-                            child: ListView.builder(
-                                itemCount: modelisedSpecificPokemonMoves.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: 80,
-                                          child: Text(
-                                            modelisedSpecificPokemonMoves[index]
-                                                    .ename ??
-                                                'Unknown',
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                            child: modelisedSpecificPokemonMoves.length > 0
+                                ? ListView.builder(
+                                    itemCount:
+                                        modelisedSpecificPokemonMoves.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: 80,
+                                              child: Text(
+                                                modelisedSpecificPokemonMoves[
+                                                            index]
+                                                        .ename ??
+                                                    'Unknown',
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${modelisedSpecificPokemonMoves[index].accuracy ?? ' - '}',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            Text(
+                                              '${modelisedSpecificPokemonMoves[index].category!.substring(0, 3).toUpperCase()} | ${modelisedSpecificPokemonMoves[index].power}',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            (modelisedSpecificPokemonMoves[
+                                                            index]
+                                                        .type ==
+                                                    'zUnknown')
+                                                ? Text('Unknown')
+                                                : Image.asset(
+                                                    'assets/type_badges/${modelisedSpecificPokemonMoves[index].type}.png',
+                                                    width: 70,
+                                                    height: 20,
+                                                  )
+                                          ],
                                         ),
-                                        Text(
-                                          '${modelisedSpecificPokemonMoves[index].accuracy ?? ' - '}',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          '${modelisedSpecificPokemonMoves[index].category!.substring(0, 3).toUpperCase()} | ${modelisedSpecificPokemonMoves[index].power}',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        (modelisedSpecificPokemonMoves[index]
-                                                    .type ==
-                                                'zUnknown')
-                                            ? Text('Unknown')
-                                            : Image.asset(
-                                                'assets/type_badges/${modelisedSpecificPokemonMoves[index].type}.png',
-                                                width: 70,
-                                                height: 20,
-                                              )
-                                      ],
+                                      );
+                                    })
+                                : Center(
+                                    child: Text(
+                                      'This Tab Requires Internet connection to display information',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
                                     ),
-                                  );
-                                }),
+                                  ),
                           ),
                         ],
                       ),

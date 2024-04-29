@@ -23,6 +23,7 @@ class _PikaDexState extends State<PikaDex> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: AppThemes.darkTheme,
       darkTheme: AppThemes.darkTheme,
       home: Scaffold(body: MainAppPage()),
