@@ -7348,6 +7348,102 @@
     "pp": 5,
     "max_pp": 8,
     "type": "Normal"
+},
+{
+    "accuracy": 100,
+    "category": "special",
+    "cname": "Burning Jealousy",
+    "ename": "Burning Jealousy",
+    "id": 663,
+    "jname": "やきつくす",
+    "power": 70,
+    "pp": 5,
+    "max_pp": 8,
+    "type": "Fire"
+},
+{
+    "accuracy": 100,
+    "category": "status",
+    "cname": "Baby-Doll Eyes",
+    "ename": "Baby Doll Eyes",
+    "id": 664,
+    "jname": "つぶらなひとみ",
+    "power": null,
+    "pp": 30,
+    "max_pp": 48,
+    "type": "Fairy"
+},
+{
+    "accuracy": 100,
+    "category": "special",
+    "cname": "Psychic Noise",
+    "ename": "Psychic Noise",
+    "id": 665,
+    "jname": "サイコノイズ",
+    "power": 75,
+    "pp": 10,
+    "max_pp": 16,
+    "type": "Psychic"
+},
+{
+    "accuracy": 100,
+    "category": "physical",
+    "cname": "Self-Destruct",
+    "ename": "Self Destruct",
+    "id": 666,
+    "jname": "じばく",
+    "power": 200,
+    "pp": 5,
+    "max_pp": 8,
+    "type": "Normal"
+},
+{
+    "accuracy": 100,
+    "category": "special",
+    "cname": "Expanding Force",
+    "ename": "Expanding Force",
+    "id": 667,
+    "jname": "はばたくちから",
+    "power": 80,
+    "pp": 10,
+    "max_pp": 16,
+    "type": "Psychic"
+},
+{
+    "accuracy": 100,
+    "category": "status",
+    "cname": "Strength Sap",
+    "ename": "Strength Sap",
+    "id": 668,
+    "jname": "ちからをすいとる",
+    "power": null,
+    "pp": 10,
+    "max_pp": 16,
+    "type": "Grass"
+},
+{
+    "accuracy": 100,
+    "category": "physical",
+    "cname": "Solar Blade",
+    "ename": "Solar Blade",
+    "id": 669,
+    "jname": "ソーラーブレード",
+    "power": 125,
+    "pp": 10,
+    "max_pp": 16,
+    "type": "Grass"
+},
+{
+    "accuracy": 100,
+    "category": "status",
+    "cname": "Corrosive Gas",
+    "ename": "Corrosive Gas",
+    "id": 670,
+    "jname": "とかガス",
+    "power": null,
+    "pp": 40,
+    "max_pp": 64,
+    "type": "Poison"
 }
 
 ]

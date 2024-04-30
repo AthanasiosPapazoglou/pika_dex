@@ -153,6 +153,12 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
   }
 
   @override
+  void dispose() {
+    modelisedSpecificPokemonMoves.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DismissingWrapper(
       child: Scaffold(
