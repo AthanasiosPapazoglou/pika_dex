@@ -246,13 +246,16 @@ class _MainAppPageState extends State<MainAppPage>
             ),
             Expanded(
               child: (decodedPokemonList == null)
-                  ? Center(
-                      child: Container(
-                        color: Colors.yellow,
-                        width: 100,
-                        height: 100,
-                      ),
+                  ? SpinKitCircle(
+                      color: Colors.white,
                     )
+                  // Center(
+                  //     child: Container(
+                  //       color: Colors.yellow,
+                  //       width: 100,
+                  //       height: 100,
+                  //     ),
+                  //   )
                   : DraggableScrollbar.arrows(
                       alwaysVisibleScrollThumb: true,
                       controller: _scrollbarController,

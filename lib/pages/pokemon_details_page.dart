@@ -401,7 +401,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage>
                                               textAlign: TextAlign.center,
                                             ),
                                             Text(
-                                              '${modelisedSpecificPokemonMoves[index].category!.substring(0, 3).toUpperCase()} | ${modelisedSpecificPokemonMoves[index].power}',
+                                              '${modelisedSpecificPokemonMoves[index].category!.substring(0, 3).toUpperCase()} | ${modelisedSpecificPokemonMoves[index].power ?? ' - '}',
                                               textAlign: TextAlign.center,
                                             ),
                                             (modelisedSpecificPokemonMoves[
