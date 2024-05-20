@@ -211,6 +211,7 @@ class _MainAppPageState extends State<MainAppPage>
                         color: Colors.white,
                         fontSize: 15,
                       ),
+                      fillColor: AppThemes.darkTheme.hintColor,
                       suffixIcon: GestureDetector(
                         onTap: () {
                           showModalBottomSheet(
@@ -249,13 +250,6 @@ class _MainAppPageState extends State<MainAppPage>
                   ? SpinKitCircle(
                       color: Colors.white,
                     )
-                  // Center(
-                  //     child: Container(
-                  //       color: Colors.yellow,
-                  //       width: 100,
-                  //       height: 100,
-                  //     ),
-                  //   )
                   : DraggableScrollbar.arrows(
                       alwaysVisibleScrollThumb: true,
                       controller: _scrollbarController,
